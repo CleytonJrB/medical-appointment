@@ -62,3 +62,11 @@ export const medicalSpecialtiesList = [
   "Reumatologia",
   "Urologia",
 ];
+
+export const genderList = [
+  { id: "male", label: "Masculino" },
+  { id: "female", label: "Feminino" },
+  { id: "non_binary", label: "Não binário" },
+  { id: "prefer_not_say", label: "Prefiro não dizer" },
+  { id: "other", label: "Outro" },
+];

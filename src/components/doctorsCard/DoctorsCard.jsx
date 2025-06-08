@@ -1,4 +1,5 @@
 import { formattedHours } from "../../utils/general";
+import { isSameMinute } from "date-fns";
 
 import {
   Card,
@@ -10,26 +11,50 @@ import {
 } from "@mui/material";
 
 import StarIcon from "@mui/icons-material/Star";
+import { customColors } from "../../styles/colors";
 
-export default function DoctorsCard({ doctor, handleSelectedHour = () => {} }) {
+export default function DoctorsCard({
+  doctor,
+  handleSelectedDoctor = () => {},
+  doctorIsSelected = false,
+  hoursSelected = null,
+}) {
   const { name, specialtys = [], rating = 3, hours } = doctor;
 
   function handleClick(date) {
-    handleSelectedHour(date);
+    handleSelectedDoctor({ dateTime: date, doctor });
   }
 
   function renderSpecialties(item, index) {
-    return <Chip key={index} label={item} />;
+    return <Chip key={index} label={item} variant="outlined" />;
   }
 
   function renderHours(item, index) {
     const label = formattedHours(item);
 
-    return <Chip key={index} label={label} onClick={() => handleClick(item)} />;
+    const hoursIsSelected =
+      doctorIsSelected && isSameMinute(item, hoursSelected);
+
+    return (
+      <Chip
+        key={index}
+        label={label}
+        onClick={() => handleClick(item)}
+        color={hoursIsSelected ? "success" : "default"}
+        sx={{ transition: "background-color 0.3s ease" }}
+      />
+    );
   }
 
   return (
-    <Card sx={{ minWidth: "5rem" }}>
+    <Card
+      sx={{
+        border: doctorIsSelected
+          ? `2px solid ${customColors.green}`
+          : "1px solid #ccc",
+        transition: "border-color 0.6s ease",
+      }}
+    >
       <CardContent>
         <Stack spacing={1}>
           <Typography gutterBottom variant="body1">
@@ -49,6 +74,10 @@ export default function DoctorsCard({ doctor, handleSelectedHour = () => {} }) {
           <Stack direction="row" gap={0.5}>
             {specialtys.map(renderSpecialties)}
           </Stack>
+
+          <Typography variant="body2" pt={1}>
+            Horários disponíveis, escolha o que melhor se encaixa na sua agenda:
+          </Typography>
 
           <Stack direction="row" gap={0.5}>
             {hours.map(renderHours)}

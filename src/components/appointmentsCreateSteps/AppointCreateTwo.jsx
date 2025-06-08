@@ -1,33 +1,55 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
+
+import { useDoctors } from "../../hooks/use-doctors";
 
 import { medicalSpecialtiesList } from "../../constantes";
 
 import * as S from "./styles";
 
-import { Stack } from "@mui/material";
+import { FormHelperText, Stack } from "@mui/material";
 
 import CustomTextField from "../customTextField/CustomTextField";
 import CustomSelected from "../customSelected/CustomSelected";
-import { useDoctors } from "../../hooks/use-doctors";
 import EmptyList from "../emptyList/EmptyList";
 import DoctorsCard from "../doctorsCard/DoctorsCard";
-import { formattedHours } from "../../utils/general";
+import { combinedFilterDoctors } from "../../utils/appointments";
 
-export default function AppointCreateTwo() {
-  const [serch, setSerch] = useState("");
+export default function AppointCreateTwo({ values, handleInput, errors }) {
+  const { doctor, dateTime } = values;
+
+  const hasError = errors?.doctor;
+
+  const [searchFilter, setSearchFilter] = useState({
+    search: "",
+    medicalSpecialties: [],
+  });
 
   const { data: doctorsList } = useDoctors();
 
-  const hasDoctors = doctorsList && doctorsList.length > 0;
+  const resultFilterDoctorList = useMemo(() => {
+    return combinedFilterDoctors(searchFilter, doctorsList);
+  }, [searchFilter, doctorsList]);
+
+  const hasDoctors =
+    resultFilterDoctorList && resultFilterDoctorList.length > 0;
+
+  function handleSelectedDoctor(doctorData) {
+    const { dateTime, doctor } = doctorData;
+
+    handleInput("doctor", doctor.id);
+    handleInput("dateTime", dateTime);
+  }
 
   function renderDoctors(item, index) {
+    const isSelected = doctor == item.id;
+
     return (
       <DoctorsCard
         key={index}
         doctor={item}
-        handleSelectedHour={(date) =>
-          console.log(`Selected hour: ${formattedHours(date)}`)
-        }
+        doctorIsSelected={isSelected}
+        hoursSelected={dateTime}
+        handleSelectedDoctor={handleSelectedDoctor}
       />
     );
   }
@@ -38,18 +60,39 @@ export default function AppointCreateTwo() {
         <CustomTextField
           label="Procurar"
           placeholder="Procurar pelo nome ou especialização"
-          value={serch}
-          onChange={(e) => setSerch(e)}
+          value={searchFilter.search}
+          onChange={(e) => {
+            setSearchFilter((state) => {
+              return { ...state, search: e };
+            });
+          }}
         />
 
         <CustomSelected
           label="Especiaplidades"
-          selectedList={medicalSpecialtiesList}
+          list={medicalSpecialtiesList}
+          multiple
+          value={searchFilter.medicalSpecialties}
+          onChange={(e) => {
+            setSearchFilter((state) => {
+              return { ...state, medicalSpecialties: e };
+            });
+          }}
         />
       </S.SearchContainer>
 
+      {hasError && (
+        <FormHelperText error>
+          *Escolha um horário de algum Doutor.
+        </FormHelperText>
+      )}
+
       <Stack gap={"1rem"}>
-        {hasDoctors ? doctorsList.map(renderDoctors) : <EmptyList simple />}
+        {hasDoctors ? (
+          resultFilterDoctorList.map(renderDoctors)
+        ) : (
+          <EmptyList simple />
+        )}
       </Stack>
     </Stack>
   );
