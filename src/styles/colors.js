@@ -1,0 +1,17 @@
+export const customColors = {
+  black: "#000000",
+  black80: "#151515",
+  black50: "#0D0D0D",
+  white: "#FFFFFF",
+  white50: "#FAFAFA",
+  gray: "#EDEDED",
+  gray80: "#565656",
+  gray50: "#C4C4C4",
+  gray05: "rgba(21, 21, 21, 0.05)",
+  green: "#369200",
+  green50: "#213A12",
+  red: "#CB0000",
+  yellow: "#FAF024",
+  blue: "#2323FA",
+  transparent: "transparent",
+};
