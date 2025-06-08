@@ -17,3 +17,17 @@ export function formattedHours(date) {
 
   return date.toLocaleTimeString([], options);
 }
+
+export function extractYupErrors(yupError) {
+  const errors = {};
+  if (yupError.inner && yupError.inner.length > 0) {
+    yupError.inner.forEach((err) => {
+      if (!errors[err.path]) {
+        errors[err.path] = err.message;
+      }
+    });
+  } else if (yupError.path) {
+    errors[yupError.path] = yupError.message;
+  }
+  return errors;
+}
