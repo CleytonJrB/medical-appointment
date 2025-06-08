@@ -9,8 +9,6 @@ import { PickersDay } from "@mui/x-date-pickers/PickersDay";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { DayCalendarSkeleton } from "@mui/x-date-pickers/DayCalendarSkeleton";
 
-const todayToInitialValue = new Date().toISOString().slice(0, 10);
-
 function ServerDay(props) {
   const { highlightedDays = [], day, outsideCurrentMonth, ...other } = props;
 
@@ -35,12 +33,14 @@ function ServerDay(props) {
 
 export default function CustomDateSelected({
   handleChange,
-  initialDate = todayToInitialValue,
+  initialDate = new Date(),
 }) {
-  const initialValue = parseISO(initialDate);
+  const formattedToInitialValue = (date) => date.toISOString().slice(0, 10);
 
-  const handleMonthChange = (date) => {
-    console.log("handleMonthChange", date);
+  const initialValue = parseISO(formattedToInitialValue(initialDate));
+
+  const handleMonthChange = () => {
+    //date
   };
 
   function handleDateChange(date) {
