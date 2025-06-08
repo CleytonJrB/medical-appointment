@@ -1,9 +1,10 @@
 import { Navigate } from "react-router-dom";
 
-import { routes } from "../utils/general";
+import { routes } from "../../utils/general";
+
+import SideMenu from "../menu/SideMenu";
 
 import { Stack } from "@mui/material";
-import SideMenu from "./menu/SideMenu";
 
 const isAuthenticated = () => {
   const token = localStorage.getItem("authToken");

@@ -1,8 +1,8 @@
 import { Route, Routes } from "react-router-dom";
 
-import PrivateRoute from "../components/PrivateRoute";
-
 import { routes } from "../utils/general";
+
+import PrivateRoute from "../components/privateRoute/PrivateRoute";
 
 import Home from "../pages/[public]/Home";
 import Login from "../pages/[public]/Login";
@@ -10,6 +10,8 @@ import Register from "../pages/[public]/Register";
 
 import Dashboard from "../pages/[private]/Dashboard";
 import MedicalDetails from "../pages/[private]/MedicalDetails";
+import Appointments from "../pages/[private]/Appointments";
+import AppointmentsCreate from "../pages/[private]/AppointmentsCreate";
 
 export default function AppRoutes() {
   return (
@@ -33,6 +35,22 @@ export default function AppRoutes() {
         element={
           <PrivateRoute>
             <MedicalDetails />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path={routes.protected.appointments}
+        element={
+          <PrivateRoute>
+            <Appointments />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path={routes.protected.appointmentsCreate}
+        element={
+          <PrivateRoute>
+            <AppointmentsCreate />
           </PrivateRoute>
         }
       />
