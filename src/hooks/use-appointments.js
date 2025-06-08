@@ -5,5 +5,8 @@ export const useAppointments = () => {
 
   const appointments = user?.appointments || [];
 
-  return appointments;
+  return {
+    data: appointments,
+    loading: false,
+  };
 };
