@@ -20,7 +20,11 @@ const defaultSteps = [
   },
 ];
 
-export default function CustomStepper({ steps = defaultSteps }) {
+export default function CustomStepper({
+  steps = defaultSteps,
+  mutateComplete = () => Promise.resolve(),
+  loading = false,
+}) {
   const [activeStep, setActiveStep] = React.useState(0);
 
   const hasSteps = steps.length > 0;
@@ -28,24 +32,31 @@ export default function CustomStepper({ steps = defaultSteps }) {
   const totalSteps = steps.length;
   const isLastStep = activeStep === totalSteps - 1;
 
-  const handleNext = () => {
+  async function handleNext() {
     const newActiveStep = activeStep + 1;
 
+    if (steps[activeStep].handleNextStep) {
+      await steps[activeStep].handleNextStep();
+    }
+
     setActiveStep(newActiveStep);
-  };
+  }
 
-  const handleBack = () => {
+  function handleBack() {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
+  }
 
-  const handleStep = (step) => () => {
+  function handleStep(step) {
     setActiveStep(step);
-  };
+  }
 
-  const handleComplete = () => {
-    //handle send data to backend
-    alert("handle send data to backend");
-  };
+  async function handleComplete() {
+    try {
+      await mutateComplete();
+    } catch (error) {
+      throw new Error("Error on handleComplete", { cause: error });
+    }
+  }
 
   function renderSteps(item, index) {
     const { label } = item;
@@ -54,7 +65,9 @@ export default function CustomStepper({ steps = defaultSteps }) {
 
     const condition = index <= activeStep;
 
-    const propsStepLabel = condition ? { onClick: handleStep(index) } : {};
+    const propsStepLabel = condition
+      ? { onClick: () => handleStep(index) }
+      : {};
 
     return (
       <Step
@@ -109,6 +122,7 @@ export default function CustomStepper({ steps = defaultSteps }) {
           disabled={activeStep === 0}
           onClick={handleBack}
           variant="text"
+          loading={loading}
           sx={{ mr: 1 }}
         >
           Voltar
@@ -117,11 +131,11 @@ export default function CustomStepper({ steps = defaultSteps }) {
         <Box sx={{ flex: "1 1 auto" }} />
 
         {isLastStep ? (
-          <Button variant="outlined" onClick={handleComplete}>
+          <Button variant="outlined" loading={loading} onClick={handleComplete}>
             Concluir
           </Button>
         ) : (
-          <Button onClick={handleNext} sx={{ mr: 1 }}>
+          <Button onClick={handleNext} sx={{ mr: 1 }} loading={loading}>
             Próximo
           </Button>
         )}
