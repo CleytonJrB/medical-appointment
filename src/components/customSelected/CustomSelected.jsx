@@ -7,6 +7,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import Chip from "@mui/material/Chip";
+import { FormHelperText } from "@mui/material";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -28,14 +29,18 @@ function getStyles(name, personName, theme) {
 }
 
 export default function CustomSelected({
+  value = null,
   label = "label",
-  selectedList = [],
+  list = [],
   onChange,
+  error = null,
+  multiple = false,
 }) {
   const theme = useTheme();
-  const [selected, setSelected] = React.useState([]);
+  const [selected, setSelected] = React.useState(value ?? []);
+  const [selectedValue, setSelectedValue] = React.useState(value ?? "");
 
-  const handleChange = (event) => {
+  const handleMultipleChange = (event) => {
     const {
       target: { value },
     } = event;
@@ -47,16 +52,25 @@ export default function CustomSelected({
     onChange(typeof value === "string" ? value.split(",") : value);
   };
 
-  return (
-    <div>
-      <FormControl sx={{ m: 1, width: 300 }}>
-        <InputLabel id="demo-multiple-chip-label">{label}</InputLabel>
+  const handleChange = (event) => {
+    setSelectedValue(event.target.value);
+    onChange(event.target.value);
+  };
+
+  if (multiple) {
+    return (
+      <FormControl sx={{ minWidth: 300, mt: ".5rem" }}>
+        <InputLabel id="demo-multiple-chip-label" error={Boolean(error)}>
+          {label}
+        </InputLabel>
+
         <Select
           labelId="demo-multiple-chip-label"
           id="demo-multiple-chip"
           multiple
           value={selected}
-          onChange={handleChange}
+          onChange={handleMultipleChange}
+          error={Boolean(error)}
           input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
           renderValue={(selected) => (
             <Box sx={{ display: "flex", gap: 0.5, overflowX: "auto" }}>
@@ -67,7 +81,7 @@ export default function CustomSelected({
           )}
           MenuProps={MenuProps}
         >
-          {selectedList.map((name) => (
+          {list.map((name) => (
             <MenuItem
               key={name}
               value={name}
@@ -77,7 +91,36 @@ export default function CustomSelected({
             </MenuItem>
           ))}
         </Select>
+
+        {Boolean(error) && <FormHelperText error>{error}</FormHelperText>}
       </FormControl>
-    </div>
+    );
+  }
+
+  return (
+    <FormControl fullWidth sx={{ mt: ".5rem" }}>
+      <InputLabel id="demo-simple-select-label" error={Boolean(error)}>
+        {label}
+      </InputLabel>
+
+      <Select
+        labelId="demo-simple-select-label"
+        id="demo-simple-select"
+        value={selectedValue}
+        label={label}
+        error={Boolean(error)}
+        onChange={handleChange}
+      >
+        {list.map((item) => {
+          return (
+            <MenuItem key={item.id} value={item.id}>
+              {item.label}
+            </MenuItem>
+          );
+        })}
+      </Select>
+
+      {Boolean(error) && <FormHelperText error>{error}</FormHelperText>}
+    </FormControl>
   );
 }
