@@ -108,6 +108,7 @@ export default function AppointmentCard({
           direction="row"
           gap={1}
           width="80%"
+          flexWrap={"wrap"}
           alignItems="center"
           justifyContent="flex-start"
         >
