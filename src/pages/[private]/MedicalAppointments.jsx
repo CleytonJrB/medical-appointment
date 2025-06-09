@@ -102,6 +102,7 @@ export default function MedicalAppointments() {
   return (
     <CommonMainContainer gap={"1rem"}>
       <CustomHeader {...customHeaderData} />
+
       <CustomDialog
         open={openConfirmedAppointment?.open}
         handleCloseDialog={() =>

@@ -33,7 +33,7 @@ export default function AllDoctors() {
 
   const customHeaderData = {
     title: "Todos os Médicos",
-    description: "Encontre o médico ideal para você",
+    description: "Encontre o médico ideal para você.",
   };
 
   function renderDoctors(item, index) {
