@@ -1,12 +1,22 @@
 import * as React from "react";
 
+import { useLocation, useNavigate } from "react-router-dom";
+import { useCurrentUser } from "../../hooks/use-current-user";
+
 import { styled } from "@mui/material/styles";
 
 import MuiDrawer from "@mui/material/Drawer";
 
 import { customColors } from "../../styles/colors";
-import { IconButton, useMediaQuery } from "@mui/material";
+import {
+  BottomNavigation,
+  BottomNavigationAction,
+  IconButton,
+  useMediaQuery,
+} from "@mui/material";
+import { menuSideBarList } from "../../constantes/menu-data";
 
+import CustomIcon from "../customIcon/CustomIcon";
 import MenuContent from "./MenuContent";
 
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
@@ -78,13 +88,60 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function SideMenu() {
+  const navigate = useNavigate();
+
+  const location = useLocation();
+  const user = useCurrentUser();
+
   const [open, setOpen] = React.useState(true);
+
+  const pathname = location.pathname;
+
+  const userType = user?.type || null;
+
+  const hiddenDrawer = useMediaQuery("(max-width:1000px)");
+  const isMobile = useMediaQuery("(max-width:800px)");
+
+  const _open = open && !hiddenDrawer;
 
   const handleOpenMenu = () => setOpen((state) => !state);
 
-  const hiddenDrawer = useMediaQuery("(max-width:1000px)");
+  function renderBottomNavigation(item) {
+    const { text, icon, link, redirect } = item;
 
-  const _open = open && !hiddenDrawer;
+    const isSelected = link.includes(pathname);
+    const customBackgroundColor = isSelected
+      ? "dimgray"
+      : customColors.transparent;
+
+    const customIconColor = isSelected
+      ? customColors.white
+      : customColors.black;
+
+    return (
+      <BottomNavigationAction
+        key={text}
+        value={text}
+        icon={<CustomIcon icon={icon} color={customIconColor} />}
+        sx={{
+          padding: "1rem 0rem",
+          backgroundColor: customBackgroundColor,
+          transition: "all 0.3s ease",
+        }}
+        onClick={() => navigate(redirect)}
+      />
+    );
+  }
+
+  if (isMobile) {
+    return (
+      <BottomNavigation
+        sx={{ position: "fixed", bottom: 0, width: "100%", zIndex: 999 }}
+      >
+        {menuSideBarList(userType).map(renderBottomNavigation)}
+      </BottomNavigation>
+    );
+  }
 
   return (
     <Drawer variant="permanent" open={_open} sx={{ zIndex: 10 }}>
@@ -101,7 +158,12 @@ export default function SideMenu() {
         </IconButton>
       )}
 
-      <MenuContent open={_open} />
+      <MenuContent
+        open={_open}
+        location={location}
+        user={user}
+        navigate={navigate}
+      />
     </Drawer>
   );
 }

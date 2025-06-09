@@ -31,7 +31,7 @@ export default function CustomTextField({
       rows={multiline}
       error={Boolean(error)}
       helperText={error}
-      sx={{ mt: ".5rem", minWidth: 300 }}
+      sx={{ mt: ".5rem", minWidth: 150 }}
     />
   );
 }

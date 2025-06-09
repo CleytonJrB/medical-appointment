@@ -21,7 +21,7 @@ export default function DoctorsCard({
   hoursSelected = null,
   hasSelectedHoues = false,
 }) {
-  const { name, specialtys = [], rating = 3, hours } = doctor;
+  const { name, specialtys = [], rating = 3, hours, description = "" } = doctor;
 
   function handleClick(date) {
     handleSelectedDoctor({ dateTime: date, doctor });
@@ -72,6 +72,10 @@ export default function DoctorsCard({
               <StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />
             }
           />
+
+          <Typography gutterBottom variant="body1">
+            {description}
+          </Typography>
 
           <Stack direction="row" gap={0.5}>
             {specialtys.map(renderSpecialties)}

@@ -1,8 +1,5 @@
 import * as React from "react";
 
-import { useLocation, useNavigate } from "react-router-dom";
-
-import { useCurrentUser } from "../../hooks/use-current-user";
 import { useSession } from "../../hooks/use-session";
 
 import { routes } from "../../utils/general";
@@ -29,12 +26,8 @@ import * as S from "./styles";
 
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 
-export default function MenuContent({ open }) {
-  const location = useLocation();
-  const navigate = useNavigate();
-
+export default function MenuContent({ open, location, user, navigate }) {
   const session = useSession();
-  const user = useCurrentUser();
 
   const pathname = location.pathname;
 

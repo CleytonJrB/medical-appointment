@@ -1,6 +1,11 @@
 import * as React from "react";
 
-import { CircularProgress, Stack, StepLabel } from "@mui/material";
+import {
+  CircularProgress,
+  Stack,
+  StepLabel,
+  useMediaQuery,
+} from "@mui/material";
 
 import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
@@ -25,6 +30,8 @@ export default function CustomStepper({
   mutateComplete = () => Promise.resolve(),
   loading = false,
 }) {
+  const isMobile = useMediaQuery("(max-width:800px)");
+
   const [activeStep, setActiveStep] = React.useState(0);
 
   const hasSteps = steps.length > 0;
@@ -76,7 +83,7 @@ export default function CustomStepper({
         sx={{ cursor: condition ? "pointer" : "default" }}
       >
         <StepLabel {...propsStepLabel}>
-          <Typography>{label}</Typography>
+          {!isMobile && <Typography>{label}</Typography>}
         </StepLabel>
       </Step>
     );
@@ -91,23 +98,29 @@ export default function CustomStepper({
           {steps.map(renderSteps)}
         </Stepper>
 
-        <Typography sx={{ mt: 2, mb: 1, py: 1 }}>
-          {hasSteps ? (
-            steps[activeStep].content()
-          ) : (
-            <Stack
-              sx={{
-                display: "flex",
-                width: "100%",
-                alignItems: "center",
-                minHeight: "65vh",
-                justifyContent: "center",
-              }}
-            >
-              <CircularProgress />
-            </Stack>
-          )}
-        </Typography>
+        {hasSteps ? (
+          <Stack gap={1}>
+            {isMobile && (
+              <Typography variant="h5" pt={4} fontWeight={600}>
+                {activeStep + 1} - {steps[activeStep].label}
+              </Typography>
+            )}
+
+            {steps[activeStep].content()}
+          </Stack>
+        ) : (
+          <Stack
+            sx={{
+              display: "flex",
+              width: "100%",
+              alignItems: "center",
+              minHeight: "65vh",
+              justifyContent: "center",
+            }}
+          >
+            <CircularProgress />
+          </Stack>
+        )}
       </Stack>
 
       <Stack

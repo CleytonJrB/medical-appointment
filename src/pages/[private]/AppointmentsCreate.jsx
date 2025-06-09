@@ -122,6 +122,8 @@ export default function AppointmentsCreate() {
       createAt: new Date(),
       updateAt: new Date(),
     };
+
+    console.log("Appointment data submitted:", appointmentDataToSubmit);
   }
 
   async function customHandleNextStep(scheme) {

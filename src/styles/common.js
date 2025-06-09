@@ -18,9 +18,9 @@ export const CommonMainContainer = styled(Stack)`
   min-height: 100vh;
 
   @media (max-width: 1000px) {
-    padding-top: 4.2rem;
+    padding-top: 1.5rem;
     padding-left: 0.8rem;
-    padding-right: 1.5rem;
-    padding-bottom: 4.5rem;
+    padding-right: 0.8rem;
+    padding-bottom: 5rem;
   }
 `;

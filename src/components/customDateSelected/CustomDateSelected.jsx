@@ -1,3 +1,5 @@
+import { useMediaQuery } from "@mui/material";
+
 import { parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
@@ -35,9 +37,30 @@ export default function CustomDateSelected({
   handleChange,
   initialDate = new Date(),
 }) {
+  const isMobile = useMediaQuery("(max-width:800px)");
+
   const formattedToInitialValue = (date) => date.toISOString().slice(0, 10);
 
   const initialValue = parseISO(formattedToInitialValue(initialDate));
+
+  const customStyles = isMobile
+    ? {}
+    : {
+        borderRadius: "8px",
+
+        fontSize: "1.2rem",
+        "& .MuiPickersDay-root": {
+          fontSize: "1.1rem",
+          width: 48,
+          height: 48,
+        },
+        "& .MuiDayCalendar-weekDayLabel": {
+          fontSize: "1.1rem",
+        },
+        "& .MuiPickersCalendarHeader-label": {
+          fontSize: "1.2rem",
+        },
+      };
 
   const handleMonthChange = () => {
     //date
@@ -66,23 +89,9 @@ export default function CustomDateSelected({
         sx={{
           width: "100%",
           maxWidth: "500px",
-          minWidth: "350px",
-          minHeight: "420px",
           margin: "0 auto",
-          borderRadius: "8px",
 
-          fontSize: "1.2rem",
-          "& .MuiPickersDay-root": {
-            fontSize: "1.1rem",
-            width: 48,
-            height: 48,
-          },
-          "& .MuiDayCalendar-weekDayLabel": {
-            fontSize: "1.1rem",
-          },
-          "& .MuiPickersCalendarHeader-label": {
-            fontSize: "1.2rem",
-          },
+          ...customStyles,
         }}
       />
     </LocalizationProvider>
