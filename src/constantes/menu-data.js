@@ -16,6 +16,12 @@ export const menuSideBarList = (userType) => {
         redirect: routes.protected.allDoctors,
       },
       {
+        text: "Todos Agendamentos",
+        icon: "turned",
+        link: [routes.protected.AllAppointments],
+        redirect: routes.protected.AllAppointments,
+      },
+      {
         text: "Salas de Atendimento",
         icon: "chair",
         link: [routes.protected.serviceRooms],

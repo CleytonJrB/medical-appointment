@@ -13,6 +13,7 @@ export const routes = {
     medicalAppointments: "/medicalAppointments",
     serviceRooms: "/serviceRooms",
     reports: "/reports",
+    AllAppointments: "/AllAppointments",
   },
 };
 

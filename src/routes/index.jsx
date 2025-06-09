@@ -16,6 +16,7 @@ import AllDoctors from "../pages/[private]/AllDoctors";
 import MedicalAppointments from "../pages/[private]/MedicalAppointments";
 import ServiceRooms from "../pages/[private]/ServiceRooms";
 import Reports from "../pages/[private]/Reports";
+import AllAppointments from "../pages/[private]/AllAppointments";
 
 export default function AppRoutes() {
   return (
@@ -87,6 +88,14 @@ export default function AppRoutes() {
         element={
           <PrivateRoute>
             <Reports />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path={routes.protected.AllAppointments}
+        element={
+          <PrivateRoute>
+            <AllAppointments />
           </PrivateRoute>
         }
       />
