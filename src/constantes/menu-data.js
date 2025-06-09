@@ -15,6 +15,12 @@ export const menuSideBarList = (userType) => {
         link: [routes.protected.allDoctors],
         redirect: routes.protected.allDoctors,
       },
+      {
+        text: "Salas de Atendimento",
+        icon: "chair",
+        link: [routes.protected.serviceRooms],
+        redirect: routes.protected.serviceRooms,
+      },
     ];
   }
 
