@@ -4,7 +4,7 @@ import { routes } from "../../utils/general";
 
 import SideMenu from "../menu/SideMenu";
 
-import { Stack } from "@mui/material";
+import { Stack, useMediaQuery } from "@mui/material";
 
 const isAuthenticated = () => {
   const token = localStorage.getItem("authToken");
@@ -17,12 +17,16 @@ const isAuthenticated = () => {
 };
 
 export default function PrivateRoute({ children }) {
+  const isMobile = useMediaQuery("(max-width:800px)");
+
+  const isMobileDirection = isMobile ? "column-reverse" : "row";
+
   if (!isAuthenticated()) {
     return <Navigate to={routes.public.login} replace />;
   }
 
   return (
-    <Stack direction="row" position="relative">
+    <Stack direction={isMobileDirection} position="relative">
       <SideMenu />
 
       {children}

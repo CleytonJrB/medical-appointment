@@ -21,6 +21,12 @@ export const menuSideBarList = (userType) => {
         link: [routes.protected.serviceRooms],
         redirect: routes.protected.serviceRooms,
       },
+      {
+        text: "Relatórios",
+        icon: "analytic",
+        link: [routes.protected.reports],
+        redirect: routes.protected.reports,
+      },
     ];
   }
 
