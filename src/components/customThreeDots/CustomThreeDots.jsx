@@ -29,6 +29,7 @@ export default function CustomThreeDots(props) {
         startIcon={icon}
         loading={isLoading}
         disabled={disabled || isLoading}
+        sx={{ backgroundColor: disabled ? "darkgrey" : null }}
       >
         <Typography color={item.color} textTransform={"none"}>
           {title}
@@ -57,7 +58,7 @@ export default function CustomThreeDots(props) {
       )}
       sx_children={{ mt: 1 }}
     >
-      <Stack p={1} borderRadius={1}>
+      <Stack p={1} borderRadius={1} gap={0.5}>
         {menus?.map((item, index) => renderMenus(item, index))}
       </Stack>
     </PopoverTemplate>
