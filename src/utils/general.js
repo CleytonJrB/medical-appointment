@@ -10,6 +10,7 @@ export const routes = {
     allDoctors: "/allDoctors",
     appointments: "/appointments",
     appointmentsCreate: "/appointments/create",
+    medicalAppointments: "/medicalAppointments",
   },
 };
 
