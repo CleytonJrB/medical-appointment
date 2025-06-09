@@ -141,7 +141,7 @@ export default function AppointmentsCreate() {
   return (
     <CommonMainContainer sx={{ gap: "1rem" }}>
       <CustomHeader
-        {...customAppointmentCreateHeaderData(!!stateRedirect.date)}
+        {...customAppointmentCreateHeaderData(!!stateRedirect?.id)}
       />
 
       <CustomStepper steps={customSteps} mutateComplete={handleConcluded} />
