@@ -7,6 +7,7 @@ export const routes = {
   protected: {
     dashboard: "/dashboard",
     details: "/details",
+    allDoctors: "/allDoctors",
     appointments: "/appointments",
     appointmentsCreate: "/appointments/create",
   },

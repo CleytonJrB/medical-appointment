@@ -32,8 +32,8 @@ export const menuSideBarList = (userType) => {
     {
       text: "Todos Médicos",
       icon: "medicalServices",
-      link: [routes.protected.details],
-      redirect: routes.protected.details,
+      link: [routes.protected.allDoctors],
+      redirect: routes.protected.allDoctors,
     },
     {
       text: "Agendamentos",

@@ -10,14 +10,16 @@ import {
   Typography,
 } from "@mui/material";
 
-import StarIcon from "@mui/icons-material/Star";
 import { customColors } from "../../styles/colors";
+
+import StarIcon from "@mui/icons-material/Star";
 
 export default function DoctorsCard({
   doctor,
   handleSelectedDoctor = () => {},
   doctorIsSelected = false,
   hoursSelected = null,
+  hasSelectedHoues = false,
 }) {
   const { name, specialtys = [], rating = 3, hours } = doctor;
 
@@ -75,13 +77,18 @@ export default function DoctorsCard({
             {specialtys.map(renderSpecialties)}
           </Stack>
 
-          <Typography variant="body2" pt={1}>
-            Horários disponíveis, escolha o que melhor se encaixa na sua agenda:
-          </Typography>
+          {hasSelectedHoues && (
+            <>
+              <Typography variant="body2" pt={1}>
+                Horários disponíveis, escolha o que melhor se encaixa na sua
+                agenda:
+              </Typography>
 
-          <Stack direction="row" gap={0.5}>
-            {hours.map(renderHours)}
-          </Stack>
+              <Stack direction="row" gap={0.5}>
+                {hours.map(renderHours)}
+              </Stack>
+            </>
+          )}
         </Stack>
       </CardContent>
     </Card>
