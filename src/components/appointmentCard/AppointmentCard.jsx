@@ -1,22 +1,20 @@
-import { useNavigate } from "react-router-dom";
-
 import { genderList } from "../../constantes";
 
 import { formatedDateDayMonthYearHoursMinutes } from "../../utils/formatDate";
+import { appointmentChipByStatus } from "../../utils/appointments";
 
-import { customColors } from "../../styles/colors";
+import { Chip, Stack, Typography } from "@mui/material";
 
-import { Card, CardContent, Stack, Typography } from "@mui/material";
 import CustomThreeDots from "../customThreeDots/CustomThreeDots";
+import CustomAccordion from "../customAccordion/CustomAccordion";
 
-import FreeCancellationRoundedIcon from "@mui/icons-material/FreeCancellationRounded";
-import PublishedWithChangesRoundedIcon from "@mui/icons-material/PublishedWithChangesRounded";
-import { routes } from "../../utils/general";
-
-export default function AppointmentCard({ ...props }) {
-  const navigate = useNavigate();
-
+export default function AppointmentCard({
+  customMenus,
+  userTypeIsDoctor = false,
+  ...props
+}) {
   const {
+    id,
     doctor,
     appointmentDate,
     patientGender,
@@ -24,30 +22,15 @@ export default function AppointmentCard({ ...props }) {
     patientEmail,
     patientPhone,
     patientBirthDate,
+    status,
+    reasonConsultation,
   } = props;
 
-  const customMenus = () => {
-    return [
-      {
-        title: "Cancelar agendamento",
-        handle: () => () => {},
-        icon: () => (
-          <FreeCancellationRoundedIcon sx={{ color: customColors.red }} />
-        ),
-        color: customColors.red,
-      },
-      {
-        title: "Reagendar",
-        handle: () =>
-          navigate(routes.protected.appointmentsCreate, { state: props }),
-        icon: () => <PublishedWithChangesRoundedIcon />,
-      },
-    ];
-  };
+  const doctorSelected = doctor;
+
+  const appointmentChip = appointmentChipByStatus(status);
 
   function renderSummaryDoctorAndDate() {
-    const doctorSelected = doctor;
-
     const dateFormatted = formatedDateDayMonthYearHoursMinutes(
       appointmentDate,
       true
@@ -55,11 +38,15 @@ export default function AppointmentCard({ ...props }) {
 
     return (
       <Stack>
-        <Typography variant="h6" fontWeight={600}>
-          Médico
-        </Typography>
+        {!userTypeIsDoctor && (
+          <>
+            <Typography variant="h6" fontWeight={600}>
+              Médico
+            </Typography>
 
-        <Typography variant="body1">{doctorSelected.name}</Typography>
+            <Typography variant="body1">{doctorSelected.name}</Typography>
+          </>
+        )}
 
         <Typography variant="h6" fontWeight={600} mt={2}>
           Data da Consulta
@@ -95,33 +82,97 @@ export default function AppointmentCard({ ...props }) {
     );
   }
 
-  return (
-    <Card
-      sx={{
-        transition: "border-color 0.6s ease",
-        width: "100%",
-      }}
-    >
-      <CardContent>
+  function renderReasonConsultation() {
+    return (
+      <Stack>
+        <Typography variant="h6" fontWeight={600}>
+          Motivo da Consulta
+        </Typography>
+
+        <Typography variant="body1">{reasonConsultation}</Typography>
+      </Stack>
+    );
+  }
+
+  function renderSummaryChildren() {
+    return (
+      <Stack
+        direction="row"
+        gap={2}
+        alignItems="center"
+        justifyContent="space-between"
+        width="100%"
+        marginRight={1}
+      >
         <Stack
-          direction={"row"}
-          justifyContent={"space-between"}
-          alignItems={"center"}
-          mb={2}
+          direction="row"
+          gap={1}
+          width="80%"
+          alignItems="center"
+          justifyContent="flex-start"
         >
-          <Stack gap={"1rem"}>
-            {renderSummaryDoctorAndDate()}
-            {renderSummaryPacient()}
+          <Stack direction="column" gap={1} width="100%">
+            {!userTypeIsDoctor && (
+              <>
+                <Typography variant="body2">Médico</Typography>
+
+                <Typography variant="body1" fontWeight={500}>
+                  {doctorSelected.name}
+                </Typography>
+              </>
+            )}
+
+            {userTypeIsDoctor && (
+              <>
+                <Typography variant="body2" sx={{ opacity: 0.6 }}>
+                  Nome do Paciente
+                </Typography>
+
+                <Typography variant="body1" fontWeight={500}>
+                  {patientName}
+                </Typography>
+              </>
+            )}
           </Stack>
 
-          <CustomThreeDots
-            menus={customMenus()}
-            styled={{
-              borderRadius: "1rem",
-            }}
-          />
+          <Stack direction="column" gap={1} width="100%">
+            <Typography variant="body2" sx={{ opacity: 0.6 }}>
+              Data da Consulta
+            </Typography>
+
+            <Typography variant="body1" fontWeight={500}>
+              {formatedDateDayMonthYearHoursMinutes(appointmentDate, true)}
+            </Typography>
+          </Stack>
+
+          <Chip label={appointmentChip.label} color={appointmentChip.color} />
         </Stack>
-      </CardContent>
-    </Card>
+
+        <CustomThreeDots
+          menus={customMenus}
+          styled={{
+            borderRadius: "1rem",
+          }}
+        />
+      </Stack>
+    );
+  }
+
+  function renderDetailsChildren() {
+    return (
+      <Stack direction="column" gap={2} alignItems="baseline" width="100%">
+        {renderSummaryDoctorAndDate()}
+        {renderSummaryPacient()}
+        {userTypeIsDoctor && renderReasonConsultation()}
+      </Stack>
+    );
+  }
+
+  return (
+    <CustomAccordion
+      index={id}
+      summaryChildren={renderSummaryChildren()}
+      detailsChildren={renderDetailsChildren()}
+    />
   );
 }

@@ -3,6 +3,7 @@ import { useAppointments } from "../../hooks/use-appointments";
 
 import { routes } from "../../utils/general";
 
+import { customColors } from "../../styles/colors";
 import { CommonMainContainer } from "../../styles/common";
 
 import { Button } from "@mui/material";
@@ -10,6 +11,9 @@ import { Button } from "@mui/material";
 import CustomHeader from "../../components/customHeader/CustomHeader";
 import EmptyList from "../../components/emptyList/EmptyList";
 import AppointmentCard from "../../components/appointmentCard/AppointmentCard";
+
+import FreeCancellationRoundedIcon from "@mui/icons-material/FreeCancellationRounded";
+import PublishedWithChangesRoundedIcon from "@mui/icons-material/PublishedWithChangesRounded";
 
 export default function Appointments() {
   const navigate = useNavigate();
@@ -23,8 +27,29 @@ export default function Appointments() {
     description: "Gerencie seus agendamentos de forma eficiente e organizada.",
   };
 
+  const customMenus = (appointment) => {
+    return [
+      {
+        title: "Cancelar agendamento",
+        handle: () => () => {},
+        icon: () => (
+          <FreeCancellationRoundedIcon sx={{ color: customColors.red }} />
+        ),
+        color: customColors.red,
+      },
+      {
+        title: "Reagendar",
+        handle: () =>
+          navigate(routes.protected.appointmentsCreate, { state: appointment }),
+        icon: () => <PublishedWithChangesRoundedIcon />,
+      },
+    ];
+  };
+
   function renderAppointments(item, index) {
-    return <AppointmentCard key={index} {...item} />;
+    return (
+      <AppointmentCard key={index} customMenus={customMenus(item)} {...item} />
+    );
   }
 
   return (

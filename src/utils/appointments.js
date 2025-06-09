@@ -57,8 +57,6 @@ export const appointmentDataInitialValues = (currentUser, stateRedirect) => {
       reasonConsultation: stateRedirect.reasonConsultation || "",
     };
 
-    console.log({ editValues, defaultValues });
-
     return editValues;
   }
 
@@ -111,4 +109,19 @@ export function combinedFilterDoctors(searchFilter, doctorList) {
 
     return validSearch && validMedicalSpecialties;
   });
+}
+
+export function appointmentChipByStatus(status) {
+  switch (status) {
+    case "pending":
+      return { label: "Esperando uma resposta", color: "warning" };
+    case "confirmed":
+      return { label: "Confirmado", color: "success" };
+    case "canceled":
+      return { label: "Cancelado", color: "error" };
+    case "completed":
+      return { label: "Concluído", color: "primary" };
+    default:
+      return { label: "Desconhecido", color: "default" };
+  }
 }
