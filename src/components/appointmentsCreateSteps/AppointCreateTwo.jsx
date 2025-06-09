@@ -50,6 +50,7 @@ export default function AppointCreateTwo({ values, handleInput, errors }) {
         doctorIsSelected={isSelected}
         hoursSelected={dateTime}
         handleSelectedDoctor={handleSelectedDoctor}
+        hasSelectedHoues
       />
     );
   }

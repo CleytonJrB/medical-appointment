@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 
 import { useCurrentUser } from "../../hooks/use-current-user";
+import { useLocation } from "react-router-dom";
 
 import {
   appointmentDataInitialValues,
@@ -11,6 +12,7 @@ import {
   customAppointmentCreateHeaderData,
 } from "../../utils/appointments";
 import { extractYupErrors } from "../../utils/general";
+import { mergeDateAndTime } from "../../utils/formatDate";
 
 import { CommonMainContainer } from "../../styles/common";
 
@@ -25,9 +27,12 @@ import AppointCreateFive from "../../components/appointmentsCreateSteps/AppointC
 
 export default function AppointmentsCreate() {
   const currentUser = useCurrentUser();
+  const location = useLocation();
+
+  const stateRedirect = location.state;
 
   const [appointmentData, setAppointmentData] = useState(
-    appointmentDataInitialValues(currentUser)
+    appointmentDataInitialValues(currentUser, stateRedirect)
   );
   const [formErrors, setFormErrors] = useState({});
 
@@ -106,7 +111,17 @@ export default function AppointmentsCreate() {
   ];
 
   async function handleConcluded() {
-    // This function would typically handle the submission of the appointment data
+    const { date, dateTime, ...others } = appointmentData;
+
+    const appointmentDataToSubmit = {
+      ...others,
+      date,
+      dateTime,
+      appointmentDate: mergeDateAndTime(date, dateTime),
+      status: "pending",
+      createAt: new Date(),
+      updateAt: new Date(),
+    };
   }
 
   async function customHandleNextStep(scheme) {
@@ -123,7 +138,9 @@ export default function AppointmentsCreate() {
 
   return (
     <CommonMainContainer sx={{ gap: "1rem" }}>
-      <CustomHeader {...customAppointmentCreateHeaderData} />
+      <CustomHeader
+        {...customAppointmentCreateHeaderData(!!stateRedirect.date)}
+      />
 
       <CustomStepper steps={customSteps} mutateComplete={handleConcluded} />
     </CommonMainContainer>

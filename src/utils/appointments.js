@@ -1,14 +1,18 @@
 import * as Yup from "yup";
 
-export const customAppointmentCreateHeaderData = {
-  title: "Criação de Agendamento",
-  hasBack: true,
-};
-
-export const appointmentDataInitialValues = (currentUser) => {
-  const { name = "", email = "", telephone = "" } = currentUser;
+export const customAppointmentCreateHeaderData = (isEditing) => {
+  const title = isEditing ? "Edição de Agendamento" : "Criação de Agendamento";
 
   return {
+    title,
+    hasBack: true,
+  };
+};
+
+export const appointmentDataInitialValues = (currentUser, stateRedirect) => {
+  const { name = "", email = "", telephone = "" } = currentUser;
+
+  const defaultValues = {
     //Step One
     date: new Date(),
 
@@ -26,6 +30,39 @@ export const appointmentDataInitialValues = (currentUser) => {
     //Step Four
     reasonConsultation: "",
   };
+
+  if (stateRedirect) {
+    const editValues = {
+      id: stateRedirect.id || null,
+
+      //Step One
+      date: stateRedirect.date ? new Date(stateRedirect.date) : new Date(),
+
+      //Step Two
+      doctor: stateRedirect.doctor.id || null,
+      dateTime: stateRedirect.dateTime
+        ? new Date(stateRedirect.dateTime)
+        : null,
+
+      //Step Three
+      patientName: stateRedirect.patientName || name,
+      patientEmail: stateRedirect.patientEmail || email,
+      patientPhone: stateRedirect.patientPhone || telephone,
+      patientBirthDate: stateRedirect.patientBirthDate
+        ? new Date(stateRedirect.patientBirthDate)
+        : null,
+      patientGender: stateRedirect.patientGender || "",
+
+      //Step Four
+      reasonConsultation: stateRedirect.reasonConsultation || "",
+    };
+
+    console.log({ editValues, defaultValues });
+
+    return editValues;
+  }
+
+  return defaultValues;
 };
 
 export const appointmentSchemeStepOne = Yup.object().shape({
