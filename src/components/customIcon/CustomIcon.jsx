@@ -8,6 +8,9 @@ import EventNoteOutlinedIcon from "@mui/icons-material/EventNoteOutlined";
 import TurnedInNotOutlinedIcon from "@mui/icons-material/TurnedInNotOutlined";
 import AnalyticsOutlinedIcon from "@mui/icons-material/AnalyticsOutlined";
 import MedicalInformationOutlinedIcon from "@mui/icons-material/MedicalInformationOutlined";
+import ChairOutlinedIcon from "@mui/icons-material/ChairOutlined";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 
 export default function CustomIcon({
   icon,
@@ -25,6 +28,9 @@ export default function CustomIcon({
     turned: <TurnedInNotOutlinedIcon sx={{ fontSize: size, color }} />,
     analytic: <AnalyticsOutlinedIcon sx={{ fontSize: size, color }} />,
     medical: <MedicalInformationOutlinedIcon sx={{ fontSize: size, color }} />,
+    chair: <ChairOutlinedIcon sx={{ fontSize: size, color }} />,
+    lockOpen: <LockOpenOutlinedIcon sx={{ fontSize: size, color }} />,
+    lockOut: <LockOutlinedIcon sx={{ fontSize: size, color }} />,
   };
 
   return icons[icon] || <></>;
