@@ -41,7 +41,9 @@ export default function MedicalAppointments() {
       "Gerencie suas consultas, aceite, cancele ou visualize detalhes.",
   };
 
-  const confirmDeleteTitle = `Tem certeza que deseja cancelar a consulta do paciente ${openDeleteDialog?.appointment?.patientName}?`;
+  const confirmDeleteTitle = `Tem certeza que deseja cancelar a consulta do paciente ${
+    openDeleteDialog?.appointment?.patientName ?? "Paciente desconhecido"
+  }?`;
 
   const customMenus = (appointment) => {
     return [
