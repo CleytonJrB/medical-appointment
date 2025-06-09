@@ -11,6 +11,7 @@ import MedicalInformationOutlinedIcon from "@mui/icons-material/MedicalInformati
 import ChairOutlinedIcon from "@mui/icons-material/ChairOutlined";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
+import AssignmentIndOutlinedIcon from "@mui/icons-material/AssignmentIndOutlined";
 
 export default function CustomIcon({
   icon,
@@ -31,6 +32,7 @@ export default function CustomIcon({
     chair: <ChairOutlinedIcon sx={{ fontSize: size, color }} />,
     lockOpen: <LockOpenOutlinedIcon sx={{ fontSize: size, color }} />,
     lockOut: <LockOutlinedIcon sx={{ fontSize: size, color }} />,
+    assignmentInd: <AssignmentIndOutlinedIcon sx={{ fontSize: size, color }} />,
   };
 
   return icons[icon] || <></>;

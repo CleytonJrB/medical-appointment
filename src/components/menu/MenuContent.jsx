@@ -2,7 +2,6 @@ import * as React from "react";
 
 import { useSession } from "../../hooks/use-session";
 
-import { routes } from "../../utils/general";
 import { customColors } from "../../styles/colors";
 import { stringToColor } from "../../utils/string-to-avatar";
 
@@ -26,7 +25,14 @@ import * as S from "./styles";
 
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 
-export default function MenuContent({ open, location, user, navigate }) {
+export default function MenuContent({
+  open,
+  location,
+  user,
+  navigate,
+  isLoading,
+  handleLogout,
+}) {
   const session = useSession();
 
   const pathname = location.pathname;
@@ -36,8 +42,6 @@ export default function MenuContent({ open, location, user, navigate }) {
   const userName = user?.name || null;
   const userEmail = user?.email || null;
   const userType = user?.type || null;
-
-  const [isLoading, setIsLoading] = React.useState(false);
 
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -55,18 +59,6 @@ export default function MenuContent({ open, location, user, navigate }) {
 
   function conditionToLoading(isLogout) {
     return isLoading && isLogout;
-  }
-
-  async function handleLogout() {
-    try {
-      setIsLoading(true);
-
-      navigate(routes.public.home);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsLoading(false);
-    }
   }
 
   function handleNavigateMenu(link) {

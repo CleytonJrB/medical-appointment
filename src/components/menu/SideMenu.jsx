@@ -3,7 +3,10 @@ import * as React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useCurrentUser } from "../../hooks/use-current-user";
 
+import { routes } from "../../utils/general";
+
 import { styled } from "@mui/material/styles";
+import * as S from "./styles";
 
 import MuiDrawer from "@mui/material/Drawer";
 
@@ -12,6 +15,9 @@ import {
   BottomNavigation,
   BottomNavigationAction,
   IconButton,
+  Menu,
+  Stack,
+  Typography,
   useMediaQuery,
 } from "@mui/material";
 import { menuSideBarList } from "../../constantes/menu-data";
@@ -21,6 +27,7 @@ import MenuContent from "./MenuContent";
 
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import MenuIcon from "@mui/icons-material/Menu";
+import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 
 const openedMixin = (theme) => ({
   display: "flex",
@@ -93,18 +100,41 @@ export default function SideMenu() {
   const location = useLocation();
   const user = useCurrentUser();
 
+  const hiddenDrawer = useMediaQuery("(max-width:1000px)");
+  const isMobile = useMediaQuery("(max-width:800px)");
+
   const [open, setOpen] = React.useState(true);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [isLoading, setIsLoading] = React.useState(false);
+
+  const userEmail = user?.email || null;
+
+  const openProfileMenu = Boolean(anchorEl);
 
   const pathname = location.pathname;
 
   const userType = user?.type || null;
 
-  const hiddenDrawer = useMediaQuery("(max-width:1000px)");
-  const isMobile = useMediaQuery("(max-width:800px)");
-
   const _open = open && !hiddenDrawer;
 
+  function handleClick(event) {
+    setAnchorEl(event.currentTarget);
+  }
+
   const handleOpenMenu = () => setOpen((state) => !state);
+  const handleClose = () => setAnchorEl(null);
+
+  async function handleLogout() {
+    try {
+      setIsLoading(true);
+
+      navigate(routes.public.home);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   function renderBottomNavigation(item) {
     const { text, icon, link, redirect } = item;
@@ -139,6 +169,46 @@ export default function SideMenu() {
         sx={{ position: "fixed", bottom: 0, width: "100%", zIndex: 999 }}
       >
         {menuSideBarList(userType).map(renderBottomNavigation)}
+
+        <BottomNavigationAction
+          value={"Perfil"}
+          icon={<CustomIcon icon={"assignmentInd"} />}
+          onClick={handleClick}
+        />
+
+        <Menu
+          id="demo-positioned-menu"
+          aria-labelledby="demo-positioned-button"
+          anchorEl={anchorEl}
+          open={openProfileMenu}
+          onClose={handleClose}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "left",
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "left",
+          }}
+        >
+          <S.CustomMenuItem disabled>
+            <Typography color={customColors.black50} fontSize={"0.9rem"} noWrap>
+              {userEmail}
+            </Typography>
+          </S.CustomMenuItem>
+
+          <S.CustomMenuItem onClick={handleLogout}>
+            <Stack direction={"row"} alignItems={"center"} gap={".5rem"}>
+              <LogoutRoundedIcon
+                style={{ fontSize: "1.25rem", color: customColors.black80 }}
+              />
+
+              <Typography color={customColors.black50} fontSize={"0.9rem"}>
+                Sair
+              </Typography>
+            </Stack>
+          </S.CustomMenuItem>
+        </Menu>
       </BottomNavigation>
     );
   }
@@ -163,6 +233,8 @@ export default function SideMenu() {
         location={location}
         user={user}
         navigate={navigate}
+        handleLogout={handleLogout}
+        isLoading={isLoading}
       />
     </Drawer>
   );
