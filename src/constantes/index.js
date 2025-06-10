@@ -6,6 +6,7 @@ export const collectionNames = {
 export const queryKeys = {
   users: "users",
   appointments: "appointments",
+  doctors: "doctors",
 };
 
 export const medicalSpecialtiesList = [

@@ -21,7 +21,7 @@ export default function DoctorsCard({
   hoursSelected = null,
   hasSelectedHoues = false,
 }) {
-  const { name, specialtys = [], rating = 3, hours, description = "" } = doctor;
+  const { name, specialties = [], stars, hours, description = "" } = doctor;
 
   function handleClick(date) {
     handleSelectedDoctor({ dateTime: date, doctor });
@@ -65,7 +65,7 @@ export default function DoctorsCard({
 
           <Rating
             name="text-feedback"
-            value={rating}
+            value={stars}
             readOnly
             precision={0.5}
             emptyIcon={
@@ -73,13 +73,13 @@ export default function DoctorsCard({
             }
           />
 
+          <Stack direction="row" gap={0.5}>
+            {specialties.map(renderSpecialties)}
+          </Stack>
+
           <Typography gutterBottom variant="body1">
             {description}
           </Typography>
-
-          <Stack direction="row" gap={0.5}>
-            {specialtys.map(renderSpecialties)}
-          </Stack>
 
           {hasSelectedHoues && (
             <>
@@ -88,7 +88,7 @@ export default function DoctorsCard({
                 agenda:
               </Typography>
 
-              <Stack direction="row" gap={0.5}>
+              <Stack direction="row" gap={0.5} flexWrap={"wrap"}>
                 {hours.map(renderHours)}
               </Stack>
             </>
