@@ -1,7 +1,8 @@
 import { useState } from "react";
 
 import { useNavigate } from "react-router-dom";
-import { useAppointments } from "../../hooks/use-appointments";
+
+import { useMyAppointments } from "../../hooks/use-my-appointments";
 
 import { routes } from "../../utils/general";
 
@@ -22,7 +23,7 @@ import RecommendOutlinedIcon from "@mui/icons-material/RecommendOutlined";
 export default function MedicalAppointments() {
   const navigate = useNavigate();
 
-  const { data: appointmentsList } = useAppointments();
+  const { data: appointmentsList } = useMyAppointments();
 
   const [openConfirmedAppointment, setOpenConfirmedAppointment] = useState({
     open: false,
