@@ -1,16 +1,15 @@
-//TYPES: CLIENT | ADMIN | DOCTOR
+//TYPES: PACIENT | ADMIN | DOCTOR
+
+import { useAuthContext } from "../providers/AuthProvider";
 
 export const useSession = () => {
+  const { user } = useAuthContext();
+
   const session = {
     data: {
-      user: {
-        name: "John Doe",
-        email: "John@email.com",
-        type: "CLIENT",
-        appointments: [],
-      },
+      user,
+      status: "authenticated",
     },
-    status: "authenticated",
   };
 
   return session;
