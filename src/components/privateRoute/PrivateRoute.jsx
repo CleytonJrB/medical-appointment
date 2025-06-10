@@ -7,13 +7,11 @@ import SideMenu from "../menu/SideMenu";
 import { Stack, useMediaQuery } from "@mui/material";
 
 const isAuthenticated = () => {
-  const token = localStorage.getItem("authToken");
+  const token = localStorage.getItem("token");
 
   const hasToken = !!token;
 
-  console.log("isAuthenticated:", hasToken);
-
-  return true;
+  return hasToken;
 };
 
 export default function PrivateRoute({ children }) {

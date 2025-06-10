@@ -2,6 +2,7 @@ import * as React from "react";
 
 import { useLocation, useNavigate } from "react-router-dom";
 import { useCurrentUser } from "../../hooks/use-current-user";
+import { useAuthContext } from "../../providers/AuthProvider";
 
 import { routes } from "../../utils/general";
 
@@ -100,6 +101,8 @@ export default function SideMenu() {
   const location = useLocation();
   const user = useCurrentUser();
 
+  const { logout } = useAuthContext();
+
   const hiddenDrawer = useMediaQuery("(max-width:1000px)");
   const isMobile = useMediaQuery("(max-width:800px)");
 
@@ -127,6 +130,8 @@ export default function SideMenu() {
   async function handleLogout() {
     try {
       setIsLoading(true);
+
+      logout();
 
       navigate(routes.public.home);
     } catch (error) {
