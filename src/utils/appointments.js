@@ -10,7 +10,7 @@ export const customAppointmentCreateHeaderData = (isEditing) => {
 };
 
 export const appointmentDataInitialValues = (currentUser, stateRedirect) => {
-  const { name = "", email = "", telephone = "" } = currentUser;
+  const { name = "", email = "", phoneNumber = "" } = currentUser;
 
   const defaultValues = {
     //Step One
@@ -23,7 +23,7 @@ export const appointmentDataInitialValues = (currentUser, stateRedirect) => {
     //Step Three
     patientName: name,
     patientEmail: email,
-    patientPhone: telephone,
+    patientPhone: phoneNumber,
     patientBirthDate: null,
     patientGender: "",
 
@@ -47,7 +47,7 @@ export const appointmentDataInitialValues = (currentUser, stateRedirect) => {
       //Step Three
       patientName: stateRedirect.patientName || name,
       patientEmail: stateRedirect.patientEmail || email,
-      patientPhone: stateRedirect.patientPhone || telephone,
+      patientPhone: stateRedirect.patientPhone || phoneNumber,
       patientBirthDate: stateRedirect.patientBirthDate
         ? new Date(stateRedirect.patientBirthDate)
         : null,

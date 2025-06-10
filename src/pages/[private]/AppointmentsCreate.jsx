@@ -33,7 +33,7 @@ export default function AppointmentsCreate() {
   const currentUser = useCurrentUser();
   const location = useLocation();
 
-  const stateRedirect = location.state;
+  const stateRedirect = location?.state ?? null;
 
   const now = new Date();
 

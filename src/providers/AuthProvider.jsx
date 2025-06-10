@@ -91,11 +91,13 @@ export const AuthProvider = ({ children }) => {
   const parseUserFromToken = (token) => {
     const decoded = jwtDecode(token);
 
+    // eslint-disable-next-line no-unused-vars
+    const { aud, exp, iss, createdAt, updatedAt, ...others } = decoded;
+
     return {
-      id: decoded.id,
-      email: decoded.email,
-      type: decoded.type,
-      name: decoded.name || "User",
+      ...others,
+      createdAt: new Date(createdAt),
+      updatedAt: new Date(updatedAt),
     };
   };
 
