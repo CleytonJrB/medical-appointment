@@ -1,4 +1,4 @@
-import { customColors } from "../styles/colors";
+import { customColors } from "../../styles/colors";
 
 import Card from "@mui/material/Card";
 
@@ -10,7 +10,7 @@ import CardActions from "@mui/material/CardActions";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 
-import CustomIcon from "../components/customIcon/CustomIcon";
+import CustomIcon from "../customIcon/CustomIcon";
 
 export default function ServiceRoomsCard({ ...props }) {
   const {

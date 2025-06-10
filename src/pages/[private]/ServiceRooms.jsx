@@ -3,7 +3,7 @@ import { CommonMainContainer } from "../../styles/common";
 import { Button, Stack } from "@mui/material";
 
 import CustomHeader from "../../components/customHeader/CustomHeader";
-import ServiceRoomsCard from "../../serviceRoomsCard/ServiceRoomsCard";
+import ServiceRoomsCard from "../../components/serviceRoomsCard/ServiceRoomsCard";
 import { useServiceRooms } from "../../hooks/use-service-rooms";
 import EmptyList from "../../components/emptyList/EmptyList";
 import { useState } from "react";

@@ -4,6 +4,7 @@ import { CommonMainContainer } from "../../styles/common";
 
 import AppointmentCard from "../../components/appointmentCard/AppointmentCard";
 import CustomHeader from "../../components/customHeader/CustomHeader";
+import EmptyList from "../../components/emptyList/EmptyList";
 
 export default function AllAppointments() {
   const { data: appointmentsList } = useAppointments();
