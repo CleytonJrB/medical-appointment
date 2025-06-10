@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://localhost:5273/api";
+const API_BASE_URL = "/api";
 
 export async function apiFetch(path, options = {}) {
   const token = localStorage.getItem("token");
@@ -9,15 +9,11 @@ export async function apiFetch(path, options = {}) {
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
   };
 
-  const response = await fetch(`${API_BASE_URL}${path}`, {
+  const finalUrl = `${API_BASE_URL}${path}`;
+  const finalOptions = {
     ...options,
     headers,
-  });
+  };
 
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message || "Erro na requisição");
-  }
-
-  return response.json();
+  return fetch(finalUrl, finalOptions);
 }

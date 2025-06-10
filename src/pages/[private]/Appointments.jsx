@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { useNavigate } from "react-router-dom";
-import { useAppointments } from "../../hooks/use-appointments";
+import { useMyAppointments } from "../../hooks/use-my-appointments";
 
 import { routes } from "../../utils/general";
 
@@ -22,7 +22,7 @@ import DeleteDialog from "../../components/dialogs/DeleteDialog";
 export default function Appointments() {
   const navigate = useNavigate();
 
-  const { data: appointmentsList } = useAppointments();
+  const { data: appointmentsList } = useMyAppointments();
 
   const [openDeleteDialog, setOpenDeleteDialog] = useState({
     open: false,
