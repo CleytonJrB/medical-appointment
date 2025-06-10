@@ -9,7 +9,10 @@ export const customAppointmentCreateHeaderData = (isEditing) => {
   };
 };
 
-export const appointmentDataInitialValues = (currentUser, stateRedirect) => {
+export const appointmentDataInitialValues = (
+  currentUser,
+  editAppointmentData
+) => {
   const { name = "", email = "", phoneNumber = "" } = currentUser;
 
   const defaultValues = {
@@ -31,30 +34,12 @@ export const appointmentDataInitialValues = (currentUser, stateRedirect) => {
     reasonConsultation: "",
   };
 
-  if (stateRedirect) {
+  if (editAppointmentData) {
+    const formatted = formattedAppointmentData(editAppointmentData);
+
     const editValues = {
-      id: stateRedirect.id || null,
-
-      //Step One
-      date: stateRedirect.date ? new Date(stateRedirect.date) : new Date(),
-
-      //Step Two
-      doctor: stateRedirect.doctor.id || null,
-      dateTime: stateRedirect.dateTime
-        ? new Date(stateRedirect.dateTime)
-        : null,
-
-      //Step Three
-      patientName: stateRedirect.patientName || name,
-      patientEmail: stateRedirect.patientEmail || email,
-      patientPhone: stateRedirect.patientPhone || phoneNumber,
-      patientBirthDate: stateRedirect.patientBirthDate
-        ? new Date(stateRedirect.patientBirthDate)
-        : null,
-      patientGender: stateRedirect.patientGender || "",
-
-      //Step Four
-      reasonConsultation: stateRedirect.reasonConsultation || "",
+      ...formatted,
+      doctor: editAppointmentData.doctor.id || null,
     };
 
     return editValues;
@@ -95,7 +80,7 @@ export function combinedFilterDoctors(searchFilter, doctorList) {
   let validMedicalSpecialties = true;
 
   return doctorList?.filter((doctor) => {
-    const docTorMedicalSpecialties = doctor?.specialtys || [];
+    const docTorMedicalSpecialties = doctor?.specialties || [];
 
     if (search) {
       validSearch = doctor.name.toLowerCase().includes(search.toLowerCase());
@@ -124,4 +109,18 @@ export function appointmentChipByStatus(status) {
     default:
       return { label: "Desconhecido", color: "default" };
   }
+}
+
+export function formattedAppointmentData(appointment) {
+  if (!appointment) return {};
+
+  return {
+    ...appointment,
+    patientBirthDate: new Date(appointment.patientBirthDate),
+    appointmentDate: new Date(appointment.appointmentDate),
+    createdAt: new Date(appointment.createdAt),
+    updatedAt: new Date(appointment.updatedAt),
+    date: new Date(appointment.date),
+    dateTime: new Date(appointment.dateTime),
+  };
 }

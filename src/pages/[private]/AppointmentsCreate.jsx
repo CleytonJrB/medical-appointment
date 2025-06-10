@@ -4,7 +4,7 @@ import { useCurrentUser } from "../../hooks/use-current-user";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 
-import { createAppointment } from "../../db/appointments.db";
+import { createAppointment, updateAppointment } from "../../db/appointments.db";
 
 import {
   appointmentDataInitialValues,
@@ -33,12 +33,15 @@ export default function AppointmentsCreate() {
   const currentUser = useCurrentUser();
   const location = useLocation();
 
-  const stateRedirect = location?.state ?? null;
+  const isDoctor = currentUser?.type === "DOCTOR";
+  const redirectTo = isDoctor
+    ? routes.protected.medicalAppointments
+    : routes.protected.appointments;
 
-  const now = new Date();
+  const editAppointmentData = location?.state ?? null;
 
   const [appointmentData, setAppointmentData] = useState(
-    appointmentDataInitialValues(currentUser, stateRedirect)
+    appointmentDataInitialValues(currentUser, editAppointmentData)
   );
   const [formErrors, setFormErrors] = useState({});
 
@@ -116,25 +119,34 @@ export default function AppointmentsCreate() {
     },
   ];
 
-  const createAppointmentMutate = useMutation({
+  const appointmentMutate = useMutation({
     mutationFn: async () => {
       const { date, dateTime, ...others } = appointmentData;
 
-      const appointmentDataToSubmit = {
-        ...others,
-        date,
-        dateTime,
-        appointmentDate: mergeDateAndTime(date, dateTime),
-        status: "pending",
-        createdBy: Number(currentUser?.id),
-        createdAt: now,
-        updatedAt: now,
-      };
+      if (appointmentData?.id) {
+        const id = appointmentData?.id;
 
-      await createAppointment(appointmentDataToSubmit);
+        const appointmentDataToEdit = {
+          ...appointmentData,
+          appointmentDate: mergeDateAndTime(date, dateTime),
+        };
+
+        await updateAppointment(id, appointmentDataToEdit);
+      } else {
+        const appointmentDataToSubmit = {
+          ...others,
+          date,
+          dateTime,
+          appointmentDate: mergeDateAndTime(date, dateTime),
+          status: "pending",
+          createdBy: Number(currentUser?.id),
+        };
+
+        await createAppointment(appointmentDataToSubmit);
+      }
     },
     onSuccess: () => {
-      navigate(routes.protected.appointments);
+      navigate(redirectTo);
     },
     onError: (error) => {
       console.error("createEmailCampaignMutate - error: ", error);
@@ -156,13 +168,14 @@ export default function AppointmentsCreate() {
   return (
     <CommonMainContainer sx={{ gap: "1rem" }}>
       <CustomHeader
-        {...customAppointmentCreateHeaderData(!!stateRedirect?.id)}
+        {...customAppointmentCreateHeaderData(!!editAppointmentData?.id)}
       />
 
       <CustomStepper
         steps={customSteps}
-        mutateComplete={() => createAppointmentMutate.mutateAsync()}
-        loading={createAppointmentMutate.isPending}
+        mutateComplete={() => appointmentMutate.mutateAsync()}
+        loading={appointmentMutate.isPending}
+        enable={appointmentData?.id}
       />
     </CommonMainContainer>
   );

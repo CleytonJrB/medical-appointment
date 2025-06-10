@@ -29,6 +29,7 @@ export default function CustomStepper({
   steps = defaultSteps,
   mutateComplete = () => Promise.resolve(),
   loading = false,
+  enable = false,
 }) {
   const isMobile = useMediaQuery("(max-width:800px)");
 
@@ -70,7 +71,7 @@ export default function CustomStepper({
 
     const completedCondition = index < activeStep;
 
-    const condition = index <= activeStep;
+    const condition = index <= activeStep || enable;
 
     const propsStepLabel = condition
       ? { onClick: () => handleStep(index) }

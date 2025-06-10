@@ -71,10 +71,16 @@ export async function createAppointment(appointmentData) {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
+    const _appointmentData = {
+      ...appointmentData,
+      updatedAt: new Date(),
+      createdAt: new Date(),
+    };
+
     const requestOptions = {
       method: "POST",
       headers: myHeaders,
-      body: JSON.stringify(appointmentData),
+      body: JSON.stringify(_appointmentData),
       redirect: "follow",
     };
 
@@ -94,10 +100,15 @@ export async function updateAppointment(id, appointmentData) {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
+    const _appointmentData = {
+      ...appointmentData,
+      updatedAt: new Date(),
+    };
+
     const requestOptions = {
       method: "PUT",
       headers: myHeaders,
-      body: JSON.stringify(appointmentData),
+      body: JSON.stringify(_appointmentData),
       redirect: "follow",
     };
 
