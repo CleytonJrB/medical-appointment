@@ -1,10 +1,13 @@
 import { useState } from "react";
 
-import { useNavigate } from "react-router-dom";
-
+import { useMutation } from "@tanstack/react-query";
 import { useMyAppointments } from "../../hooks/use-my-appointments";
+import { updateAppointment } from "../../db/appointments.db";
 
-import { routes } from "../../utils/general";
+import {
+  formattedAppointmentData,
+  isCustomDaysBefore,
+} from "../../utils/appointments";
 
 import { CommonMainContainer } from "../../styles/common";
 import { customColors } from "../../styles/colors";
@@ -21,9 +24,8 @@ import PublishedWithChangesRoundedIcon from "@mui/icons-material/PublishedWithCh
 import RecommendOutlinedIcon from "@mui/icons-material/RecommendOutlined";
 
 export default function MedicalAppointments() {
-  const navigate = useNavigate();
-
-  const { data: appointmentsList } = useMyAppointments();
+  const { data: appointmentsList, refetch: refetchAppointmentsList } =
+    useMyAppointments();
 
   const [openConfirmedAppointment, setOpenConfirmedAppointment] = useState({
     open: false,
@@ -46,7 +48,37 @@ export default function MedicalAppointments() {
     openDeleteDialog?.appointment?.patientName ?? "Paciente desconhecido"
   }?`;
 
+  const cancelAppointmentMutate = useMutation({
+    mutationFn: async (ap) => {
+      const id = ap?.id;
+
+      const updatedAppointment = {
+        ...ap,
+        doctor: ap?.doctor?.id || null,
+        status: "cancelled",
+      };
+
+      await updateAppointment(id, formattedAppointmentData(updatedAppointment));
+    },
+    onSuccess: () => {
+      refetchAppointmentsList();
+    },
+    onError: (error) => {
+      console.error("cancelAppointmentMutate - error: ", error);
+    },
+  });
+
   const customMenus = (appointment) => {
+    const isConfirmed = appointment?.status === "confirmed";
+    const isCancelled = appointment?.status === "cancelled";
+    const isCompleted = appointment?.status === "completed";
+
+    const condition = isCancelled || isConfirmed || isCompleted;
+    const isBefore = isCustomDaysBefore(
+      2,
+      new Date(appointment?.appointmentDate)
+    );
+
     return [
       {
         title: "Confimar agendamento",
@@ -55,6 +87,7 @@ export default function MedicalAppointments() {
           <RecommendOutlinedIcon sx={{ color: customColors.green }} />
         ),
         color: customColors.green,
+        disabled: condition,
       },
       {
         title: "Cancelar agendamento",
@@ -65,10 +98,10 @@ export default function MedicalAppointments() {
         color: customColors.red,
       },
       {
-        title: "Alterar agendamento",
-        handle: () =>
-          navigate(routes.protected.appointmentsCreate, { state: appointment }),
+        title: "Alterar Sala de Atendimento",
+        handle: () => handleOpenCloseDialogConfirmedAppointment(appointment),
         icon: () => <PublishedWithChangesRoundedIcon />,
+        disabled: !isConfirmed || isBefore,
       },
     ];
   };
@@ -92,10 +125,19 @@ export default function MedicalAppointments() {
   }
 
   function renderAppointments(item, index) {
+    const isConfirmed = item?.status === "confirmed";
+    const isCancelled = item?.status === "cancelled";
+    const isCompleted = item?.status === "completed";
+
+    const condition =
+      (isCancelled || isConfirmed || isCompleted) &&
+      isCustomDaysBefore(2, new Date(item?.appointmentDate));
+
     return (
       <AppointmentCard
         key={index}
         customMenus={customMenus(item)}
+        disabledThreeDots={condition}
         userTypeIsDoctor
         {...item}
       />
@@ -117,18 +159,24 @@ export default function MedicalAppointments() {
             handleOpenCloseDialogConfirmedAppointment(null)
           }
           appointment={openConfirmedAppointment?.appointment}
+          refetchAppointmentsList={refetchAppointmentsList}
         />
       </CustomDialog>
 
       <CustomDialog
-        open={openDeleteDialog.open}
+        open={openDeleteDialog?.open}
         handleCloseDialog={() => handleOpenCloseDeleteDialog(null)}
       >
         <DeleteDialog
           handleCloseOpenDialogDelete={() => handleOpenCloseDeleteDialog(null)}
-          mutate={async () => {}}
+          mutate={async () =>
+            await cancelAppointmentMutate.mutateAsync(
+              openDeleteDialog?.appointment
+            )
+          }
           confirmDeleteMessage={confirmDeleteTitle}
-          cancelDeleteButtonTitle="Cancelar Consulta"
+          confirmDeleteTitle={"Cancelar Consulta"}
+          cancelDeleteButtonTitle="Confirmar Cancelamento"
           confirmDeleteDescription={null}
           hasConfirmation
         />

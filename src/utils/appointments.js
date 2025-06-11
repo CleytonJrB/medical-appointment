@@ -1,5 +1,7 @@
 import * as Yup from "yup";
 
+import { addDays, isSameDay } from "date-fns";
+
 export const customAppointmentCreateHeaderData = (isEditing) => {
   const title = isEditing ? "Edição de Agendamento" : "Criação de Agendamento";
 
@@ -102,8 +104,8 @@ export function appointmentChipByStatus(status) {
       return { label: "Esperando uma resposta", color: "warning" };
     case "confirmed":
       return { label: "Confirmado", color: "success" };
-    case "canceled":
-      return { label: "Cancelado", color: "error" };
+    case "cancelled":
+      return { label: "Não aceito", color: "error" };
     case "completed":
       return { label: "Concluído", color: "primary" };
     default:
@@ -123,4 +125,12 @@ export function formattedAppointmentData(appointment) {
     date: new Date(appointment.date),
     dateTime: new Date(appointment.dateTime),
   };
+}
+
+export function isCustomDaysBefore({ days = 2, targetDate }) {
+  const today = new Date();
+
+  const twoDaysBefore = addDays(today, days);
+
+  return isSameDay(twoDaysBefore, targetDate);
 }

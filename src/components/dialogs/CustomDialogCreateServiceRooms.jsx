@@ -1,4 +1,10 @@
 import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+
+import {
+  createServiceRooms,
+  updateServiceRooms,
+} from "../../db/serviceRooms.db";
 
 import * as Yup from "yup";
 
@@ -20,28 +26,41 @@ const actionsCreateServiceRoomsSchema = () =>
 
 export default function CustomDialogCreateServiceRooms({
   handleOpenCloseCreateServiceRooms,
+  servicesRoomsData,
+  refetchServiceRooms,
 }) {
-  const [loading, setLoding] = useState(false);
   const [errors, setFormErrors] = useState(false);
 
-  const [customValues, setCustomValues] = useState({
-    name: "",
-    description: "",
-  });
+  const initialServieceRoomData = servicesRoomsData?.id
+    ? servicesRoomsData
+    : {
+        name: "",
+        description: "",
+      };
 
-  async function handleCreate() {
-    try {
-      setLoding(true);
+  const [customValues, setCustomValues] = useState(initialServieceRoomData);
 
+  const serviceRoomsMutate = useMutation({
+    mutationFn: async () => {
       await customHandle();
 
+      if (servicesRoomsData?.id) {
+        const id = servicesRoomsData?.id;
+
+        await updateServiceRooms(id, { ...customValues, status: "active" });
+      } else {
+        await createServiceRooms({ ...customValues, status: "active" });
+      }
+    },
+    onSuccess: () => {
+      refetchServiceRooms();
+
       handleOpenCloseCreateServiceRooms();
-    } catch (error) {
-      console.error("Error deleting contact items:", error);
-    } finally {
-      setLoding(false);
-    }
-  }
+    },
+    onError: (error) => {
+      console.error("createEmailCampaignMutate - error: ", error);
+    },
+  });
 
   async function customHandle() {
     try {
@@ -86,6 +105,11 @@ export default function CustomDialogCreateServiceRooms({
               setCustomValues((prev) => {
                 return { ...prev, name: e };
               });
+              setFormErrors((prev) => {
+                const newErrors = { ...prev };
+                delete newErrors.name;
+                return newErrors;
+              });
             }}
           />
 
@@ -98,6 +122,11 @@ export default function CustomDialogCreateServiceRooms({
             onChange={(e) => {
               setCustomValues((prev) => {
                 return { ...prev, description: e };
+              });
+              setFormErrors((prev) => {
+                const newErrors = { ...prev };
+                delete newErrors.description;
+                return newErrors;
               });
             }}
           />
@@ -113,8 +142,8 @@ export default function CustomDialogCreateServiceRooms({
 
             handleOpenCloseCreateServiceRooms();
           }}
-          disabled={loading}
-          loading={loading}
+          disabled={serviceRoomsMutate.isPending}
+          loading={serviceRoomsMutate.isPending}
         >
           Cancelar
         </Button>
@@ -122,12 +151,12 @@ export default function CustomDialogCreateServiceRooms({
         <Button
           variant="contained"
           fullWidth
-          disabled={loading}
-          loading={loading}
+          disabled={serviceRoomsMutate.isPending}
+          loading={serviceRoomsMutate.isPending}
           onClick={async (e) => {
             e.stopPropagation();
 
-            await handleCreate();
+            await serviceRoomsMutate.mutateAsync();
           }}
         >
           Criar

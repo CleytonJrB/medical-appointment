@@ -18,6 +18,7 @@ import CustomDialog from "../../components/customDialog/CustomDialog";
 import FreeCancellationRoundedIcon from "@mui/icons-material/FreeCancellationRounded";
 import PublishedWithChangesRoundedIcon from "@mui/icons-material/PublishedWithChangesRounded";
 import DeleteDialog from "../../components/dialogs/DeleteDialog";
+import { isCustomDaysBefore } from "../../utils/appointments";
 
 export default function Appointments() {
   const navigate = useNavigate();
@@ -49,12 +50,20 @@ export default function Appointments() {
           <FreeCancellationRoundedIcon sx={{ color: customColors.red }} />
         ),
         color: customColors.red,
+        disabled: isCustomDaysBefore({
+          days: 2,
+          targetDate: new Date(appointment?.appointmentDate),
+        }),
       },
       {
         title: "Reagendar",
         handle: () =>
           navigate(routes.protected.appointmentsCreate, { state: appointment }),
         icon: () => <PublishedWithChangesRoundedIcon />,
+        disabled: isCustomDaysBefore({
+          days: 1,
+          targetDate: new Date(appointment?.appointmentDate),
+        }),
       },
     ];
   };
@@ -69,8 +78,19 @@ export default function Appointments() {
   }
 
   function renderAppointments(item, index) {
+    const isConfirmed = item?.status === "confirmed";
+    const isCancelled = item?.status === "cancelled";
+    const isCompleted = item?.status === "completed";
+
+    const condition = isCancelled || isConfirmed || isCompleted;
+
     return (
-      <AppointmentCard key={index} customMenus={customMenus(item)} {...item} />
+      <AppointmentCard
+        key={index}
+        disabledThreeDots={condition}
+        customMenus={customMenus(item)}
+        {...item}
+      />
     );
   }
 
