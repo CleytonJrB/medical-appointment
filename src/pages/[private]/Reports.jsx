@@ -1,11 +1,23 @@
+import { useAppointments } from "../../hooks/use-appointments";
+
 import { CommonMainContainer } from "../../styles/common";
 
 import { BarChart } from "@mui/x-charts/BarChart";
-
-import CustomHeader from "../../components/customHeader/CustomHeader";
 import { Stack } from "@mui/material";
 
+import CustomHeader from "../../components/customHeader/CustomHeader";
+
 export default function Reports() {
+  const { data: appointmentsList } = useAppointments();
+
+  const totalAppointments = appointmentsList?.length ?? 0;
+  const totalCancelled = appointmentsList?.filter(
+    (appointment) => appointment.status === "cancelled"
+  ).length;
+  const totalConfirmed = appointmentsList?.filter(
+    (appointment) => appointment.status === "confirmed"
+  ).length;
+
   const customHeaderData = {
     title: "Relatórios",
     description:
@@ -17,7 +29,9 @@ export default function Reports() {
       <CustomHeader {...customHeaderData} />
       <Stack width="100%" height="100%" gap={"1rem"}>
         <BarChart
-          series={[{ data: [35, 44, 24, 34] }]}
+          series={[
+            { data: [totalAppointments, totalCancelled, totalConfirmed] },
+          ]}
           height={290}
           xAxis={[
             { data: ["Agendamentos", "Cancelamentos", "Disponibilidade"] },

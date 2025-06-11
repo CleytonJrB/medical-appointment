@@ -8,6 +8,8 @@ import { updateAppointment } from "../../db/appointments.db";
 
 import { isSameDay } from "date-fns";
 
+import { sendEmail } from "../../actions/sendEmail";
+
 import * as Yup from "yup";
 
 import { formattedAppointmentData } from "../../utils/appointments";
@@ -20,6 +22,7 @@ import { Button, IconButton, Stack, Typography } from "@mui/material";
 import CustomSelected from "../customSelected/CustomSelected";
 
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import { formatedDateDayMonthYearHoursMinutes } from "../../utils/formatDate";
 
 const confirmSchema = Yup.object().shape({
   serviceRoomSelected: Yup.string().required("Campo obrigatorio!"),
@@ -96,6 +99,25 @@ export default function CustomDialogConfirmAppointment({
       };
 
       await updateAppointment(id, formattedAppointmentData(updatedAppointment));
+
+      const dateFormatted = formatedDateDayMonthYearHoursMinutes(
+        appointment?.appointmentDate,
+        true
+      );
+
+      const getServiceRoom = serviceRoomsList?.find(
+        (item) => item.id === serviceRoomSelected
+      );
+
+      const emailBody = {
+        to: appointment?.patientEmail,
+        name: appointment?.patientName,
+        doctor: appointment?.doctor?.name,
+        room: getServiceRoom?.name,
+        date: dateFormatted,
+      };
+
+      await sendEmail(emailBody);
     },
     onSuccess: () => {
       refetchAppointmentsList();

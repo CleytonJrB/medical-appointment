@@ -1,6 +1,6 @@
-import { useMediaQuery } from "@mui/material";
+import { Tooltip, useMediaQuery } from "@mui/material";
 
-import { parseISO } from "date-fns";
+import { isSameMonth, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 import Badge from "@mui/material/Badge";
@@ -19,25 +19,44 @@ function ServerDay(props) {
     highlightedDays.indexOf(props.day.getDate()) >= 0;
 
   return (
-    <Badge
-      key={props.day.toString()}
-      overlap="circular"
-      badgeContent={isSelected ? "✅" : undefined}
-    >
-      <PickersDay
-        {...other}
-        outsideCurrentMonth={outsideCurrentMonth}
-        day={day}
-      />
-    </Badge>
+    <Tooltip title={isSelected ? "Agendamento disponível" : null}>
+      <Badge
+        key={props.day.toString()}
+        overlap="circular"
+        badgeContent={isSelected ? "✅" : undefined}
+      >
+        <PickersDay
+          {...other}
+          outsideCurrentMonth={outsideCurrentMonth}
+          day={day}
+        />
+      </Badge>
+    </Tooltip>
   );
 }
 
 export default function CustomDateSelected({
   handleChange,
   initialDate = new Date(),
+  appointments = [],
 }) {
   const isMobile = useMediaQuery("(max-width:800px)");
+
+  const now = new Date();
+
+  const getAppointmentsSameMonth = appointments?.filter((ap) => {
+    const appointmentDate = new Date(ap.appointmentDate);
+    const condition = isSameMonth(appointmentDate, now);
+
+    const isConfirmed = ap.status === "confirmed";
+
+    return condition && isConfirmed;
+  });
+
+  const getDays = getAppointmentsSameMonth?.map((ap) => {
+    const appointmentDate = new Date(ap.appointmentDate);
+    return appointmentDate.getDate();
+  });
 
   const formattedToInitialValue = (date) => date.toISOString().slice(0, 10);
 
@@ -62,8 +81,8 @@ export default function CustomDateSelected({
         },
       };
 
-  const handleMonthChange = () => {
-    //date
+  const handleMonthChange = (date) => {
+    console.log("Month changed to:", date);
   };
 
   function handleDateChange(date) {
@@ -83,7 +102,7 @@ export default function CustomDateSelected({
         }}
         slotProps={{
           day: {
-            highlightedDays: [],
+            highlightedDays: getDays || [],
           },
         }}
         sx={{

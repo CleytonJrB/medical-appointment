@@ -3,12 +3,12 @@ import { routes } from "../utils/general";
 export const menuSideBarList = (userType) => {
   if (userType === "ADMIN") {
     return [
-      {
-        text: "Home",
-        icon: "cottage",
-        link: [routes.protected.dashboard],
-        redirect: routes.protected.dashboard,
-      },
+      // {
+      //   text: "Home",
+      //   icon: "cottage",
+      //   link: [routes.protected.dashboard],
+      //   redirect: routes.protected.dashboard,
+      // },
       {
         text: "Todos Médicos",
         icon: "medicalServices",

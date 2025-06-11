@@ -117,6 +117,7 @@ export default function SideMenu() {
   const pathname = location.pathname;
 
   const userType = user?.type || null;
+  const isAdmin = userType === "ADMIN";
 
   const _open = open && !hiddenDrawer;
 
@@ -201,6 +202,18 @@ export default function SideMenu() {
               {userEmail}
             </Typography>
           </S.CustomMenuItem>
+
+          {isAdmin && (
+            <S.CustomMenuItem>
+              <Typography
+                color={customColors.black50}
+                fontSize={"0.9rem"}
+                noWrap
+              >
+                Configurações
+              </Typography>
+            </S.CustomMenuItem>
+          )}
 
           <S.CustomMenuItem onClick={handleLogout}>
             <Stack direction={"row"} alignItems={"center"} gap={".5rem"}>
