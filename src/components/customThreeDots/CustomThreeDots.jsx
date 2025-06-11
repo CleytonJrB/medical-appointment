@@ -22,6 +22,7 @@ export default function CustomThreeDots(props) {
         key={index}
         onClick={(e) => {
           e.stopPropagation();
+          e.preventDefault();
 
           handle();
         }}
@@ -45,6 +46,7 @@ export default function CustomThreeDots(props) {
         <IconButton
           onClick={(e) => {
             e.stopPropagation();
+            e.preventDefault();
 
             handleOpenPopover(e);
           }}

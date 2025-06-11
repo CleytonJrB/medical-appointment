@@ -11,6 +11,7 @@ import CustomAccordion from "../customAccordion/CustomAccordion";
 export default function AppointmentCard({
   customMenus,
   userTypeIsDoctor = false,
+  disabledThreeDots = false,
   ...props
 }) {
   const {
@@ -24,6 +25,7 @@ export default function AppointmentCard({
     patientBirthDate,
     status,
     reasonConsultation,
+    serviceRoom,
   } = props;
 
   const doctorSelected = doctor;
@@ -44,7 +46,7 @@ export default function AppointmentCard({
               Médico
             </Typography>
 
-            <Typography variant="body1">{doctorSelected.name}</Typography>
+            <Typography variant="body1">{doctorSelected?.name}</Typography>
           </>
         )}
 
@@ -53,6 +55,18 @@ export default function AppointmentCard({
         </Typography>
 
         <Typography variant="body1">{dateFormatted}</Typography>
+
+        {serviceRoom && (
+          <>
+            <Typography variant="h6" fontWeight={600} mt={2}>
+              Sala de Atendimento
+            </Typography>
+
+            <Typography variant="body1">{serviceRoom.name}</Typography>
+
+            <Typography variant="body1">{serviceRoom.description}</Typography>
+          </>
+        )}
       </Stack>
     );
   }
@@ -118,7 +132,7 @@ export default function AppointmentCard({
                 <Typography variant="body2">Médico</Typography>
 
                 <Typography variant="body1" fontWeight={500}>
-                  {doctorSelected.name}
+                  {doctorSelected?.name}
                 </Typography>
               </>
             )}
@@ -146,11 +160,16 @@ export default function AppointmentCard({
             </Typography>
           </Stack>
 
-          <Chip label={appointmentChip.label} color={appointmentChip.color} />
+          <Chip
+            label={appointmentChip.label}
+            color={appointmentChip.color}
+            sx={{ fontWeight: 700 }}
+          />
         </Stack>
 
         <CustomThreeDots
           menus={customMenus}
+          disabled={disabledThreeDots}
           styled={{
             borderRadius: "1rem",
           }}
@@ -164,7 +183,7 @@ export default function AppointmentCard({
       <Stack direction="column" gap={2} alignItems="baseline" width="100%">
         {renderSummaryDoctorAndDate()}
         {renderSummaryPacient()}
-        {userTypeIsDoctor && renderReasonConsultation()}
+        {renderReasonConsultation()}
       </Stack>
     );
   }
