@@ -33,6 +33,7 @@ export default function CustomIcon({
     chair: <ChairOutlinedIcon sx={{ fontSize: size, color }} />,
     lockOpen: <LockOpenOutlinedIcon sx={{ fontSize: size, color }} />,
     lockOut: <LockOutlinedIcon sx={{ fontSize: size, color }} />,
+    assignmentInd: <AssignmentIndOutlinedIcon sx={{ fontSize: size, color }} />,
     edit: <ModeEditOutlineOutlinedIcon sx={{ fontSize: size, color }} />,
   };
 
