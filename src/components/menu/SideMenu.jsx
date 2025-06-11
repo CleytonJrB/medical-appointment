@@ -29,6 +29,8 @@ import MenuContent from "./MenuContent";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import MenuIcon from "@mui/icons-material/Menu";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
+import CustomDialog from "../customDialog/CustomDialog";
+import SettingsDialog from "../dialogs/SettingsDialog";
 
 const openedMixin = (theme) => ({
   display: "flex",
@@ -109,6 +111,10 @@ export default function SideMenu() {
   const [open, setOpen] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [openCloseSettingsDialog, setOpenCloseSettingsDialog] = React.useState({
+    open: false,
+    hospital: null,
+  });
 
   const userEmail = user?.email || null;
 
@@ -127,6 +133,15 @@ export default function SideMenu() {
 
   const handleOpenMenu = () => setOpen((state) => !state);
   const handleClose = () => setAnchorEl(null);
+
+  function handleCloseOpenSettingsDialog(hospital) {
+    setOpenCloseSettingsDialog((state) => {
+      return {
+        open: !state.open,
+        serviceRooms: hospital ?? null,
+      };
+    });
+  }
 
   async function handleLogout() {
     try {
@@ -171,68 +186,100 @@ export default function SideMenu() {
 
   if (isMobile) {
     return (
-      <BottomNavigation
-        sx={{ position: "fixed", bottom: 0, width: "100%", zIndex: 999 }}
-      >
-        {menuSideBarList(userType).map(renderBottomNavigation)}
-
-        <BottomNavigationAction
-          value={"Perfil"}
-          icon={<CustomIcon icon={"assignmentInd"} />}
-          onClick={handleClick}
-        />
-
-        <Menu
-          id="demo-positioned-menu"
-          aria-labelledby="demo-positioned-button"
-          anchorEl={anchorEl}
-          open={openProfileMenu}
-          onClose={handleClose}
-          anchorOrigin={{
-            vertical: "top",
-            horizontal: "left",
-          }}
-          transformOrigin={{
-            vertical: "top",
-            horizontal: "left",
-          }}
+      <>
+        <CustomDialog
+          open={openCloseSettingsDialog.open}
+          handleCloseDialog={() => handleCloseOpenSettingsDialog(null)}
         >
-          <S.CustomMenuItem disabled>
-            <Typography color={customColors.black50} fontSize={"0.9rem"} noWrap>
-              {userEmail}
-            </Typography>
-          </S.CustomMenuItem>
+          <SettingsDialog
+            handleCloseOpenSettingsDialog={() =>
+              handleCloseOpenSettingsDialog(null)
+            }
+            hospital={openCloseSettingsDialog.hospital}
+          />
+        </CustomDialog>
 
-          {isAdmin && (
-            <S.CustomMenuItem>
+        <BottomNavigation
+          sx={{ position: "fixed", bottom: 0, width: "100%", zIndex: 999 }}
+        >
+          {menuSideBarList(userType).map(renderBottomNavigation)}
+
+          <BottomNavigationAction
+            value={"Perfil"}
+            icon={<CustomIcon icon={"assignmentInd"} />}
+            onClick={handleClick}
+          />
+
+          <Menu
+            id="demo-positioned-menu"
+            aria-labelledby="demo-positioned-button"
+            anchorEl={anchorEl}
+            open={openProfileMenu}
+            onClose={handleClose}
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "left",
+            }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "left",
+            }}
+          >
+            <S.CustomMenuItem disabled>
               <Typography
                 color={customColors.black50}
                 fontSize={"0.9rem"}
                 noWrap
               >
-                Configurações
+                {userEmail}
               </Typography>
             </S.CustomMenuItem>
-          )}
 
-          <S.CustomMenuItem onClick={handleLogout}>
-            <Stack direction={"row"} alignItems={"center"} gap={".5rem"}>
-              <LogoutRoundedIcon
-                style={{ fontSize: "1.25rem", color: customColors.black80 }}
-              />
+            {isAdmin && (
+              <S.CustomMenuItem
+                onClick={() => handleCloseOpenSettingsDialog(null)}
+              >
+                <Typography
+                  color={customColors.black50}
+                  fontSize={"0.9rem"}
+                  noWrap
+                >
+                  Configurações
+                </Typography>
+              </S.CustomMenuItem>
+            )}
 
-              <Typography color={customColors.black50} fontSize={"0.9rem"}>
-                Sair
-              </Typography>
-            </Stack>
-          </S.CustomMenuItem>
-        </Menu>
-      </BottomNavigation>
+            <S.CustomMenuItem onClick={handleLogout}>
+              <Stack direction={"row"} alignItems={"center"} gap={".5rem"}>
+                <LogoutRoundedIcon
+                  style={{ fontSize: "1.25rem", color: customColors.black80 }}
+                />
+
+                <Typography color={customColors.black50} fontSize={"0.9rem"}>
+                  Sair
+                </Typography>
+              </Stack>
+            </S.CustomMenuItem>
+          </Menu>
+        </BottomNavigation>
+      </>
     );
   }
 
   return (
     <Drawer variant="permanent" open={_open} sx={{ zIndex: 10 }}>
+      <CustomDialog
+        open={openCloseSettingsDialog.open}
+        handleCloseDialog={() => handleCloseOpenSettingsDialog(null)}
+      >
+        <SettingsDialog
+          handleCloseOpenSettingsDialog={() =>
+            handleCloseOpenSettingsDialog(null)
+          }
+          hospital={openCloseSettingsDialog.hospital}
+        />
+      </CustomDialog>
+
       {!hiddenDrawer && (
         <IconButton
           onClick={handleOpenMenu}
@@ -253,6 +300,8 @@ export default function SideMenu() {
         navigate={navigate}
         handleLogout={handleLogout}
         isLoading={isLoading}
+        handleCloseOpenSettingsDialog={handleCloseOpenSettingsDialog}
+        isAdmin={isAdmin}
       />
     </Drawer>
   );

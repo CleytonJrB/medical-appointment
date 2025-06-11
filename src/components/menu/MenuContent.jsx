@@ -32,6 +32,8 @@ export default function MenuContent({
   navigate,
   isLoading,
   handleLogout,
+  handleCloseOpenSettingsDialog,
+  isAdmin,
 }) {
   const session = useSession();
 
@@ -148,6 +150,19 @@ export default function MenuContent({
                 noWrap
               >
                 {userEmail}
+              </Typography>
+            </S.CustomMenuItem>
+          )}
+
+          {isAdmin && (
+            <S.CustomMenuItem>
+              <Typography
+                color={customColors.black50}
+                fontSize={"0.9rem"}
+                noWrap
+                onClick={() => handleCloseOpenSettingsDialog(null)}
+              >
+                Configurações
               </Typography>
             </S.CustomMenuItem>
           )}

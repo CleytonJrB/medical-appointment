@@ -3,6 +3,7 @@ export const collectionNames = {
   appointments: "appointments",
   doctors: "doctors",
   serviceRooms: "serviceRooms",
+  hospital: "hospital",
 };
 
 export const queryKeys = {
@@ -10,6 +11,7 @@ export const queryKeys = {
   appointments: "appointments",
   doctors: "doctors",
   serviceRooms: "serviceRooms",
+  hospital: "hospital",
 };
 
 export const medicalSpecialtiesList = [
