@@ -9,6 +9,7 @@ export const collectionNames = {
 export const queryKeys = {
   users: "users",
   appointments: "appointments",
+  myappointments: "myappointments",
   doctors: "doctors",
   serviceRooms: "serviceRooms",
   hospital: "hospital",

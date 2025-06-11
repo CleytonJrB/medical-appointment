@@ -13,7 +13,7 @@ export const useMyAppointments = () => {
   const { data: serviceRoomsList } = useServiceRooms();
 
   const { data, isLoading, refetch } = useQuery({
-    queryKey: [queryKeys.appointments],
+    queryKey: [queryKeys.myappointments],
     queryFn: async () => await getMyAppointments(),
   });
 

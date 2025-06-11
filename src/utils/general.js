@@ -3,6 +3,7 @@ export const routes = {
     home: "/",
     login: "/login",
     register: "/register",
+    doctorRegister: "/register/doctor",
   },
   protected: {
     dashboard: "/dashboard",
