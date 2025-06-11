@@ -1,8 +1,12 @@
 import { useMemo, useState } from "react";
 
 import { useDoctors } from "../../hooks/use-doctors";
+import { useAppointments } from "../../hooks/use-appointments";
+
+import { isSameDay } from "date-fns";
 
 import { medicalSpecialtiesList } from "../../constantes";
+import { combinedFilterDoctors } from "../../utils/appointments";
 
 import * as S from "./styles";
 
@@ -12,10 +16,19 @@ import CustomTextField from "../customTextField/CustomTextField";
 import CustomSelected from "../customSelected/CustomSelected";
 import EmptyList from "../emptyList/EmptyList";
 import DoctorsCard from "../doctorsCard/DoctorsCard";
-import { combinedFilterDoctors } from "../../utils/appointments";
 
 export default function AppointCreateTwo({ values, handleInput, errors }) {
-  const { doctor, dateTime } = values;
+  const { doctor, date, dateTime } = values;
+
+  const { data: allAppointments } = useAppointments();
+
+  const _allAppointments = allAppointments?.filter((appointment) => {
+    const condition = isSameDay(date, new Date(appointment?.appointmentDate));
+    const isCancelled = appointment.status === "cancelled";
+    const isCompleted = appointment.status === "completed";
+
+    return condition && !isCancelled && !isCompleted;
+  });
 
   const hasError = errors?.doctor;
 
@@ -41,7 +54,11 @@ export default function AppointCreateTwo({ values, handleInput, errors }) {
   }
 
   function renderDoctors(item, index) {
-    const isSelected = doctor == item.id;
+    const isSelected = doctor == item?.id;
+
+    const appointmentsForDoctor = _allAppointments
+      ?.filter((appointment) => appointment?.doctor?.id === item?.id)
+      .map((appointment) => new Date(appointment?.dateTime));
 
     return (
       <DoctorsCard
@@ -50,6 +67,7 @@ export default function AppointCreateTwo({ values, handleInput, errors }) {
         doctorIsSelected={isSelected}
         hoursSelected={dateTime}
         handleSelectedDoctor={handleSelectedDoctor}
+        appointmentsForDoctor={appointmentsForDoctor}
         hasSelectedHoues
       />
     );

@@ -15,7 +15,7 @@ import { customColors } from "../../styles/colors";
 import CustomHeader from "../../components/customHeader/CustomHeader";
 import EmptyList from "../../components/emptyList/EmptyList";
 import AppointmentCard from "../../components/appointmentCard/AppointmentCard";
-import CustomDialogToConfirmedAppointment from "../../components/dialogs/CustomDialogCreateCampaignType";
+import CustomDialogConfirmAppointment from "../../components/dialogs/CustomDialogConfirmAppointment";
 import CustomDialog from "../../components/customDialog/CustomDialog";
 import DeleteDialog from "../../components/dialogs/DeleteDialog";
 
@@ -157,7 +157,7 @@ export default function MedicalAppointments() {
           handleOpenCloseDialogConfirmedAppointment(null)
         }
       >
-        <CustomDialogToConfirmedAppointment
+        <CustomDialogConfirmAppointment
           handleOpenCloseDialogConfirmedAppointment={() =>
             handleOpenCloseDialogConfirmedAppointment(null)
           }

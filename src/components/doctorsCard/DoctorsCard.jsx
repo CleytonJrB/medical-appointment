@@ -20,6 +20,7 @@ export default function DoctorsCard({
   doctorIsSelected = false,
   hoursSelected = null,
   hasSelectedHoues = false,
+  appointmentsForDoctor = [],
 }) {
   const { name, specialties = [], stars, hours, description = "" } = doctor;
 
@@ -33,6 +34,11 @@ export default function DoctorsCard({
 
   function renderHours(item, index) {
     const label = formattedHours(item);
+    const formattedAppointmentsForDoctor = formattedHours(
+      new Date(appointmentsForDoctor)
+    );
+
+    const conditionToDisabled = formattedAppointmentsForDoctor == label;
 
     const hoursIsSelected =
       doctorIsSelected && isSameMinute(item, hoursSelected);
@@ -43,6 +49,7 @@ export default function DoctorsCard({
         label={label}
         onClick={() => handleClick(item)}
         color={hoursIsSelected ? "success" : "default"}
+        disabled={conditionToDisabled}
         sx={{ transition: "background-color 0.3s ease" }}
       />
     );
@@ -89,7 +96,7 @@ export default function DoctorsCard({
               </Typography>
 
               <Stack direction="row" gap={0.5} flexWrap={"wrap"}>
-                {hours.map(renderHours)}
+                {hours?.map(renderHours)}
               </Stack>
             </>
           )}

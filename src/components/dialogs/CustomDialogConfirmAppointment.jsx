@@ -2,8 +2,11 @@ import { useState } from "react";
 
 import { useMutation } from "@tanstack/react-query";
 import { useServiceRooms } from "../../hooks/use-service-rooms";
+import { useAppointments } from "../../hooks/use-appointments";
 
 import { updateAppointment } from "../../db/appointments.db";
+
+import { isSameDay } from "date-fns";
 
 import * as Yup from "yup";
 
@@ -22,12 +25,35 @@ const confirmSchema = Yup.object().shape({
   serviceRoomSelected: Yup.string().required("Campo obrigatorio!"),
 });
 
-export default function CustomDialogToConfirmedAppointment({
+export default function CustomDialogConfirmAppointment({
   handleOpenCloseDialogConfirmedAppointment,
   appointment,
   refetchAppointmentsList,
 }) {
+  const { data: allAppointments } = useAppointments();
   const { data: serviceRoomsList } = useServiceRooms();
+
+  const _allAppointmentsWithServiceRoomId = allAppointments
+    ?.filter((ap) => {
+      const _appointmentDate = appointment?.appointmentDate ?? new Date();
+
+      const condition = isSameDay(
+        _appointmentDate,
+        new Date(ap?.appointmentDate)
+      );
+
+      const isCancelled = ap.status === "cancelled";
+      const isCompleted = ap.status === "completed";
+
+      return (
+        condition &&
+        !isCancelled &&
+        !isCompleted &&
+        ap?.id !== appointment?.id &&
+        ap.serviceRoomId
+      );
+    })
+    .map((ap) => ap.serviceRoomId);
 
   const patientName = appointment?.patientName ?? "";
   const appointmentDate = appointment?.appointmentDate ?? new Date();
@@ -40,12 +66,14 @@ export default function CustomDialogToConfirmedAppointment({
   const [formErrors, setFormErrors] = useState({});
 
   function formattedSelectedLit() {
-    return serviceRoomsList?.map((item) => {
-      return {
-        id: item.id,
-        label: item.name,
-      };
-    });
+    return serviceRoomsList
+      ?.filter((item) => !_allAppointmentsWithServiceRoomId?.includes(item?.id))
+      ?.map((item) => {
+        return {
+          id: item?.id,
+          label: item?.name,
+        };
+      });
   }
 
   const confirmAppointmentMutate = useMutation({
