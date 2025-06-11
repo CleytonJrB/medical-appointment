@@ -14,6 +14,10 @@ import Step from "@mui/material/Step";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
+import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
+import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
+import DoneAllRoundedIcon from "@mui/icons-material/DoneAllRounded";
+
 const defaultSteps = [
   {
     label: "Default",
@@ -137,7 +141,8 @@ export default function CustomStepper({
           onClick={handleBack}
           variant="text"
           loading={loading}
-          sx={{ mr: 1 }}
+          startIcon={<ArrowBackIosNewRoundedIcon />}
+          sx={{ mr: 1, textTransform: "none", fontSize: "1rem" }}
         >
           Voltar
         </Button>
@@ -145,11 +150,23 @@ export default function CustomStepper({
         <Box sx={{ flex: "1 1 auto" }} />
 
         {isLastStep ? (
-          <Button variant="outlined" loading={loading} onClick={handleComplete}>
+          <Button
+            variant="contained"
+            loading={loading}
+            onClick={handleComplete}
+            color="success"
+            endIcon={<DoneAllRoundedIcon />}
+            sx={{ textTransform: "none", fontSize: "1rem" }}
+          >
             Concluir
           </Button>
         ) : (
-          <Button onClick={handleNext} sx={{ mr: 1 }} loading={loading}>
+          <Button
+            onClick={handleNext}
+            sx={{ mr: 1, textTransform: "none", fontSize: "1rem" }}
+            loading={loading}
+            endIcon={<ArrowForwardIosRoundedIcon />}
+          >
             Próximo
           </Button>
         )}
