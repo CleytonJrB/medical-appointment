@@ -12,7 +12,12 @@ import Typography from "@mui/material/Typography";
 
 import CustomIcon from "../customIcon/CustomIcon";
 
-export default function ServiceRoomsCard({ ...props }) {
+export default function ServiceRoomsCard({
+  onEditClick,
+  onUpdateStatusClick,
+  isLoading,
+  ...props
+}) {
   const {
     name = `Sala ${props.item}`,
     description = "Boa para tal tal tal...",
@@ -23,7 +28,7 @@ export default function ServiceRoomsCard({ ...props }) {
   const iconLockFromStatus = status === "active" ? "lockOut" : "lockOpen";
   const toolFromStatus = status === "active" ? "Tracar Sala" : "Abrir Sala";
 
-  const appointmentsCount = appointments.length;
+  const appointmentsCount = appointments?.length;
 
   const appointmentChipStatus = {
     label: status === "active" ? "Ativa" : "Inativa",
@@ -31,7 +36,13 @@ export default function ServiceRoomsCard({ ...props }) {
   };
 
   return (
-    <Card sx={{ minWidth: 345 }}>
+    <Card
+      sx={{
+        minWidth: 345,
+        transition: "0.3s ease",
+        "@media (max-width: 800px)": { minWidth: "100%" },
+      }}
+    >
       <Stack alignItems={"center"} padding={2}>
         <Stack p={4} bgcolor={"GrayText"} borderRadius={999}>
           <CustomIcon icon={"chair"} color={customColors.white} />
@@ -59,8 +70,24 @@ export default function ServiceRoomsCard({ ...props }) {
 
       <CardActions disableSpacing>
         <Tooltip title={toolFromStatus} placement="top">
-          <IconButton aria-label={iconLockFromStatus}>
+          <IconButton
+            aria-label={iconLockFromStatus}
+            disabled={isLoading}
+            loading={isLoading}
+            onClick={async () => await onUpdateStatusClick(props)}
+          >
             <CustomIcon icon={iconLockFromStatus} />
+          </IconButton>
+        </Tooltip>
+
+        <Tooltip title={"Editar Sala"} placement="top">
+          <IconButton
+            aria-label={iconLockFromStatus}
+            disabled={isLoading}
+            loading={isLoading}
+            onClick={async () => await onEditClick(props)}
+          >
+            <CustomIcon icon={"edit"} />
           </IconButton>
         </Tooltip>
       </CardActions>

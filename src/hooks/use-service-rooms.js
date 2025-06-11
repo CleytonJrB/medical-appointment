@@ -1,25 +1,40 @@
+import { useQuery } from "@tanstack/react-query";
+
+import { queryKeys } from "../constantes";
+
+import { getServiceRooms } from "../db/serviceRooms.db";
+import { useAppointments } from "./use-appointments";
+
 //status - active, inactive
 
-const mookServiceRooms = [
-  {
-    id: "asd22133f",
-    name: "Serviços gerais",
-    description: "Sala de Atendimento 1",
-    appointments: [],
-    status: "active",
-
-    createAt: new Date(),
-    updateAt: new Date(),
-  },
-];
-
 export const useServiceRooms = () => {
-  // const array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const { data: appointmentList } = useAppointments();
 
-  const serviceRooms = [...mookServiceRooms];
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: [queryKeys.serviceRooms],
+    queryFn: async () => await getServiceRooms(),
+  });
+
+  const serviceRooms = (data ?? [])
+    .map((room) => {
+      const appointments = (appointmentList ?? [])?.filter(
+        (appointment) => appointment?.serviceRoomId === room?.id
+      );
+
+      return {
+        ...room,
+        appointments: appointments ?? [],
+      };
+    })
+    .sort((a, b) => {
+      if (a.status === "active" && b.status !== "active") return -1;
+      if (a.status !== "active" && b.status === "active") return 1;
+      return 0;
+    });
 
   return {
     data: serviceRooms,
-    loading: false,
+    loading: isLoading,
+    refetch,
   };
 };

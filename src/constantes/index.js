@@ -1,12 +1,15 @@
 export const collectionNames = {
   users: "users",
   appointments: "appointments",
+  doctors: "doctors",
+  serviceRooms: "serviceRooms",
 };
 
 export const queryKeys = {
   users: "users",
   appointments: "appointments",
   doctors: "doctors",
+  serviceRooms: "serviceRooms",
 };
 
 export const medicalSpecialtiesList = [
