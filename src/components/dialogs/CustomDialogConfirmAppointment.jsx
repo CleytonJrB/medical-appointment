@@ -67,7 +67,11 @@ export default function CustomDialogConfirmAppointment({
 
   function formattedSelectedLit() {
     return serviceRoomsList
-      ?.filter((item) => !_allAppointmentsWithServiceRoomId?.includes(item?.id))
+      ?.filter(
+        (item) =>
+          !_allAppointmentsWithServiceRoomId?.includes(item?.id) &&
+          item?.status === "active"
+      )
       ?.map((item) => {
         return {
           id: item?.id,
