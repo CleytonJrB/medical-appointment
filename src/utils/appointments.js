@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 
-import { addDays, isSameDay } from "date-fns";
+import { addDays, isAfter, isSameDay } from "date-fns";
 
 export const customAppointmentCreateHeaderData = (isEditing) => {
   const title = isEditing ? "Edição de Agendamento" : "Criação de Agendamento";
@@ -132,5 +132,7 @@ export function isCustomDaysBefore({ days = 2, targetDate }) {
 
   const twoDaysBefore = addDays(today, days);
 
-  return isSameDay(twoDaysBefore, targetDate);
+  return (
+    isSameDay(twoDaysBefore, targetDate) || isAfter(twoDaysBefore, targetDate)
+  );
 }

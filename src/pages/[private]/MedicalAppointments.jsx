@@ -74,10 +74,10 @@ export default function MedicalAppointments() {
     const isCompleted = appointment?.status === "completed";
 
     const condition = isCancelled || isConfirmed || isCompleted;
-    const isBefore = isCustomDaysBefore(
-      2,
-      new Date(appointment?.appointmentDate)
-    );
+    const isBefore = isCustomDaysBefore({
+      days: 2,
+      targetDate: new Date(appointment?.appointmentDate),
+    });
 
     return [
       {
@@ -131,7 +131,10 @@ export default function MedicalAppointments() {
 
     const condition =
       (isCancelled || isConfirmed || isCompleted) &&
-      isCustomDaysBefore(2, new Date(item?.appointmentDate));
+      isCustomDaysBefore({
+        days: 2,
+        targetDate: new Date(item?.appointmentDate),
+      });
 
     return (
       <AppointmentCard
