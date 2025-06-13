@@ -102,7 +102,16 @@ export default function DoctorRegister() {
 
       <AuthLabel>
         <Typography variant="h3">Ola Dr.</Typography>
-        <Typography variant="h5">
+        <Typography
+          variant="h5"
+          noWrap
+          sx={{
+            maxWidth: "80vw",
+            whiteSpace: "normal",
+            wordWrap: "break-word",
+            overflowWrap: "break-word",
+          }}
+        >
           Vamos criar uma nova conta pra você, passe essas informações
         </Typography>
 
