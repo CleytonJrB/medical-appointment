@@ -18,6 +18,9 @@ export const CustomMenuItem = styled(MenuItem)({
 });
 
 export const StyledBadge = styled(Badge)(({ theme }) => ({
+  position: "absolute",
+  bottom: 4,
+  paddingLeft: "1.5rem",
   "& .MuiBadge-badge": {
     backgroundColor: customColors.green,
     color: customColors.green,

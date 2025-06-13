@@ -95,7 +95,7 @@ export default function MenuContent({
           gap={".5rem"}
           marginBottom={"2rem"}
         >
-          <Avatar {...stringAvatar(null)} sx={{ alignSelf: "center" }}>
+          <Avatar {...stringAvatar(null)}>
             <CircularProgress size="1rem" />
           </Avatar>
         </Stack>
@@ -104,27 +104,36 @@ export default function MenuContent({
 
     return (
       <Stack
-        alignItems={"center"}
-        justifyContent={"center"}
         gap={".5rem"}
         marginBottom={"2rem"}
+        maxHeight={"120px"}
+        justifyContent={"center"}
       >
-        <Tooltip title={"Abrir menu de perfil"}>
-          <S.StyledBadge
-            overlap="circular"
-            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-            variant="dot"
-            id="demo-positioned-button"
-            aria-controls={openProfileMenu ? "demo-positioned-menu" : undefined}
-            aria-haspopup="true"
-            aria-expanded={openProfileMenu ? "true" : undefined}
-            onClick={handleClick}
-            sx={{
-              cursor: "pointer",
-            }}
+        <Tooltip
+          title={"Abrir menu de perfil"}
+          onClick={handleClick}
+          sx={{
+            cursor: "pointer",
+          }}
+        >
+          <Stack
+            position={"relative"}
+            alignItems={"center"}
+            justifyContent={"center"}
           >
-            <Avatar {...stringAvatar(userName)} sx={{ alignSelf: "center" }} />
-          </S.StyledBadge>
+            <S.StyledBadge
+              overlap="circular"
+              anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+              variant="dot"
+              id="demo-positioned-button"
+              aria-controls={
+                openProfileMenu ? "demo-positioned-menu" : undefined
+              }
+              aria-haspopup="true"
+              aria-expanded={openProfileMenu ? "true" : undefined}
+            />
+            <Avatar {...stringAvatar(userName)} />
+          </Stack>
         </Tooltip>
 
         <Menu
@@ -180,25 +189,51 @@ export default function MenuContent({
           </S.CustomMenuItem>
         </Menu>
 
-        {open && <Typography>{userEmail}</Typography>}
+        {open && (
+          <Typography
+            sx={{
+              whiteSpace: "normal",
+              wordWrap: "break-word",
+              overflowWrap: "break-word",
+              textAlign: "center",
+            }}
+          >
+            {userEmail}
+          </Typography>
+        )}
       </Stack>
     );
   }
 
   function renderMenuItem(item) {
+    const isSelected = item.link.includes(pathname);
+
+    const customBackgroundColor = isSelected
+      ? customColors.customBlue50
+      : customColors.transparent;
+
+    const customIconColor = isSelected
+      ? customColors.customYellow
+      : customColors.black;
+
     return (
       <ListItem key={item.text} disablePadding sx={{ mb: "0.25rem" }}>
         <ListItemButton
           key={item.text}
           onClick={() => handleNavigateMenu(item.redirect)}
-          selected={item.link.includes(pathname)}
           sx={[
             {
+              backgroundColor: customBackgroundColor,
               display: "flex",
               width: "100%",
               minHeight: "2.5rem",
               px: 2.5,
               borderRadius: ".75rem",
+              transition: "all 0.3s ease",
+
+              ":hover": {
+                filter: "brightness(0.9)",
+              },
             },
             open
               ? {
@@ -233,7 +268,7 @@ export default function MenuContent({
                       },
                 ]}
               >
-                <CustomIcon icon={item.icon} />
+                <CustomIcon icon={item.icon} color={customIconColor} />
               </ListItemIcon>
 
               <ListItemText
@@ -248,10 +283,11 @@ export default function MenuContent({
                 ]}
               >
                 <Typography
-                  color={customColors.black50}
+                  color={customIconColor}
                   fontSize={"0.9rem"}
                   noWrap
                   fontWeight={500}
+                  sx={{ transition: "all 0.3s ease" }}
                 >
                   {item.text}
                 </Typography>

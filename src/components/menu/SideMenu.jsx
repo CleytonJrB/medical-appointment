@@ -18,6 +18,7 @@ import {
   IconButton,
   Menu,
   Stack,
+  Tooltip,
   Typography,
   useMediaQuery,
 } from "@mui/material";
@@ -26,17 +27,18 @@ import { menuSideBarList } from "../../constantes/menu-data";
 import CustomIcon from "../customIcon/CustomIcon";
 import MenuContent from "./MenuContent";
 
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import MenuIcon from "@mui/icons-material/Menu";
+import FirstPageRoundedIcon from "@mui/icons-material/FirstPageRounded";
+import SubjectRoundedIcon from "@mui/icons-material/SubjectRounded";
+
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import CustomDialog from "../customDialog/CustomDialog";
 import SettingsDialog from "../dialogs/SettingsDialog";
 
-const openedMixin = (theme) => ({
+const openedMixin = () => ({
   display: "flex",
   flexDirection: "column",
 
-  paddingTop: "4rem",
+  paddingTop: "3rem",
   paddingLeft: "2rem",
 
   width: "15vw",
@@ -45,24 +47,19 @@ const openedMixin = (theme) => ({
 
   border: "0px",
 
-  transition: theme.transitions.create("width", {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.enteringScreen,
-  }),
+  transition: "all 0.3s ease",
+
   overflowX: "hidden",
 });
 
 const closedMixin = (theme) => ({
-  paddingTop: "4rem",
+  paddingTop: "3rem",
 
   border: "0px",
 
   backgroundColor: customColors.transparent,
 
-  transition: theme.transitions.create("width", {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
+  transition: "all 0.3s ease",
 
   overflowX: "hidden",
 
@@ -78,6 +75,8 @@ const Drawer = styled(MuiDrawer, {
   flexShrink: 0,
   whiteSpace: "nowrap",
   boxSizing: "border-box",
+
+  transition: "all 0.3s ease",
 
   variants: [
     {
@@ -162,11 +161,11 @@ export default function SideMenu() {
 
     const isSelected = link.includes(pathname);
     const customBackgroundColor = isSelected
-      ? "dimgray"
+      ? customColors.customBlue50
       : customColors.transparent;
 
     const customIconColor = isSelected
-      ? customColors.white
+      ? customColors.customYellow
       : customColors.black;
 
     return (
@@ -175,7 +174,7 @@ export default function SideMenu() {
         value={text}
         icon={<CustomIcon icon={icon} color={customIconColor} />}
         sx={{
-          padding: "1rem 0rem",
+          padding: "1.5rem 0rem",
           backgroundColor: customBackgroundColor,
           transition: "all 0.3s ease",
         }}
@@ -208,6 +207,10 @@ export default function SideMenu() {
             value={"Perfil"}
             icon={<CustomIcon icon={"assignmentInd"} />}
             onClick={handleClick}
+            sx={{
+              padding: "1.5rem 0rem",
+              transition: "all 0.3s ease",
+            }}
           />
 
           <Menu
@@ -280,6 +283,21 @@ export default function SideMenu() {
         />
       </CustomDialog>
 
+      <Tooltip title="Pronto Consulta" placement="right">
+        <img
+          className="logo"
+          src={"public/medical.svg"}
+          alt={"logo"}
+          width={"40rem"}
+          height={"40rem"}
+          style={{
+            display: "flex",
+            alignSelf: "center",
+            marginBottom: "1.5rem",
+          }}
+        />
+      </Tooltip>
+
       {!hiddenDrawer && (
         <IconButton
           onClick={handleOpenMenu}
@@ -287,9 +305,14 @@ export default function SideMenu() {
             width: "fit-content",
             alignSelf: _open ? "flex-end" : "center",
             marginRight: _open ? "1rem" : "0rem",
+            transition: "all 0.3s ease",
           }}
         >
-          {_open ? <ChevronLeftIcon /> : <MenuIcon />}
+          {_open ? (
+            <FirstPageRoundedIcon sx={{ color: customColors.black }} />
+          ) : (
+            <SubjectRoundedIcon sx={{ color: customColors.black }} />
+          )}
         </IconButton>
       )}
 
