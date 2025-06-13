@@ -6,7 +6,7 @@
 //   "room": "Sala 101 - Clínica Geral"
 // }
 
-import { sendEmailHtml } from "../templates/sendEmailHtml";
+import { confirmAppointmentHtml } from "../templates/confirmAppointmentHtml";
 
 const PROD_URL = "https://api.resend.com/emails";
 
@@ -23,7 +23,7 @@ export async function sendEmail(emailBody) {
       from: "Acme <onboarding@resend.dev>",
       to: "cleytonjrbg.dev@gmail.com",
       subject: "Pronto Consulta - Confirmação de Consulta",
-      html: sendEmailHtml({
+      html: confirmAppointmentHtml({
         date: emailBody.date,
         doctor: emailBody.doctor,
         room: emailBody.room,
