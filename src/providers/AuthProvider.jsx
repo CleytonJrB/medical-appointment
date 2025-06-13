@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }) => {
 
       setToken(data.token);
 
-      return data.token;
+      return parseUserFromToken(data.token);
     } catch (error) {
       console.error("Registration failed:", error);
       throw new Error("Registration failed. Please try again.");
@@ -75,7 +75,7 @@ export const AuthProvider = ({ children }) => {
 
       setToken(data.token);
 
-      return data.token;
+      return parseUserFromToken(data.token);
     } catch (error) {
       console.error("Login failed:", error);
       throw new Error("Login failed. Please try again.");
