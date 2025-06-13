@@ -80,7 +80,7 @@ export default function DoctorsCard({
             }
           />
 
-          <Stack direction="row" gap={0.5}>
+          <Stack direction="row" gap={0.5} flexWrap={"wrap"}>
             {specialties.map(renderSpecialties)}
           </Stack>
 
