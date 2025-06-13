@@ -107,7 +107,7 @@ export default function Dashboard() {
         width={"100%"}
         justifyContent={"space-between"}
       >
-        {statusDataList.map((item, index) => renderStatusData(item, index))}
+        {statusDataList?.map((item, index) => renderStatusData(item, index))}
       </Stack>
 
       <CustomDateSelected

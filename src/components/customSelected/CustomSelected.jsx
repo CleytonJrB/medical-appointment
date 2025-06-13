@@ -59,7 +59,12 @@ export default function CustomSelected({
 
   if (multiple) {
     return (
-      <FormControl sx={{ minWidth: 300, mt: ".5rem" }}>
+      <FormControl
+        sx={{
+          minWidth: 180,
+          mt: ".5rem",
+        }}
+      >
         <InputLabel id="demo-multiple-chip-label" error={Boolean(error)}>
           {label}
         </InputLabel>
