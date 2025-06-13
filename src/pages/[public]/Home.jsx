@@ -1,6 +1,4 @@
-import { Stack } from "@mui/material";
-
-import { CommonMainContainer } from "../../styles/common";
+import { Stack, Typography } from "@mui/material";
 
 import HomeHeader from "../../components/homeHeader/HomeHeader";
 
@@ -9,12 +7,27 @@ export default function Home() {
     <Stack direction="column" position="relative">
       <HomeHeader />
 
-      <CommonMainContainer>
-        <div className="flex flex-col items-center justify-center h-screen">
-          <h1 className="text-4xl font-bold mb-4">Welcome to My App</h1>
-          <p className="text-lg">This is the home page.</p>
-        </div>
-      </CommonMainContainer>
+      <Stack
+        alignItems="center"
+        justifyContent="center"
+        width={"100vw"}
+        height={"90vh"}
+        gap={2}
+      >
+        <Typography variant="h1" textAlign={"center"}>
+          Pronto Consulta
+        </Typography>
+
+        <Typography
+          variant="body1"
+          fontSize={"1.5rem"}
+          textAlign={"center"}
+          width={"60%"}
+        >
+          Agende sua consulta médica de forma rápida, simples e segura. Encontre
+          profissionais disponíveis e escolha o melhor horário para você.
+        </Typography>
+      </Stack>
     </Stack>
   );
 }
