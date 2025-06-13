@@ -42,9 +42,18 @@ export default function Login() {
 
       await customHandle(values);
 
-      await login(email, password);
+      const user = await login(email, password);
+
+      return user;
     },
-    onSuccess: () => {
+    onSuccess: (user) => {
+      const isAdmin = user?.type === "ADMIN";
+
+      if (isAdmin) {
+        navigate(routes.protected.allDoctors);
+        return;
+      }
+
       navigate(routes.protected.dashboard);
     },
     onError: (error) => {
