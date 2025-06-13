@@ -20,21 +20,71 @@ export default function CustomIcon({
   color = customColors.black80,
 }) {
   const icons = {
-    dashboard: <DashboardCustomizeRoundedIcon sx={{ fontSize: size, color }} />,
-    medication: <MedicationOutlinedIcon sx={{ fontSize: size, color }} />,
-    cottage: <CottageOutlinedIcon sx={{ fontSize: size, color }} />,
-    medicalServices: (
-      <MedicalServicesOutlinedIcon sx={{ fontSize: size, color }} />
+    dashboard: (
+      <DashboardCustomizeRoundedIcon
+        sx={{ fontSize: size, color, transition: "all 0.3s ease" }}
+      />
     ),
-    eventNote: <EventNoteOutlinedIcon sx={{ fontSize: size, color }} />,
-    turned: <TurnedInNotOutlinedIcon sx={{ fontSize: size, color }} />,
-    analytic: <AnalyticsOutlinedIcon sx={{ fontSize: size, color }} />,
-    medical: <MedicalInformationOutlinedIcon sx={{ fontSize: size, color }} />,
-    chair: <ChairOutlinedIcon sx={{ fontSize: size, color }} />,
-    lockOpen: <LockOpenOutlinedIcon sx={{ fontSize: size, color }} />,
-    lockOut: <LockOutlinedIcon sx={{ fontSize: size, color }} />,
-    assignmentInd: <AssignmentIndOutlinedIcon sx={{ fontSize: size, color }} />,
-    edit: <ModeEditOutlineOutlinedIcon sx={{ fontSize: size, color }} />,
+    medication: (
+      <MedicationOutlinedIcon
+        sx={{ fontSize: size, color, transition: "all 0.3s ease" }}
+      />
+    ),
+    cottage: (
+      <CottageOutlinedIcon
+        sx={{ fontSize: size, color, transition: "all 0.3s ease" }}
+      />
+    ),
+    medicalServices: (
+      <MedicalServicesOutlinedIcon
+        sx={{ fontSize: size, color, transition: "all 0.3s ease" }}
+      />
+    ),
+    eventNote: (
+      <EventNoteOutlinedIcon
+        sx={{ fontSize: size, color, transition: "all 0.3s ease" }}
+      />
+    ),
+    turned: (
+      <TurnedInNotOutlinedIcon
+        sx={{ fontSize: size, color, transition: "all 0.3s ease" }}
+      />
+    ),
+    analytic: (
+      <AnalyticsOutlinedIcon
+        sx={{ fontSize: size, color, transition: "all 0.3s ease" }}
+      />
+    ),
+    medical: (
+      <MedicalInformationOutlinedIcon
+        sx={{ fontSize: size, color, transition: "all 0.3s ease" }}
+      />
+    ),
+    chair: (
+      <ChairOutlinedIcon
+        sx={{ fontSize: size, color, transition: "all 0.3s ease" }}
+      />
+    ),
+    lockOpen: (
+      <LockOpenOutlinedIcon
+        sx={{ fontSize: size, color, transition: "all 0.3s ease" }}
+      />
+    ),
+    lockOut: (
+      <LockOutlinedIcon
+        sx={{ fontSize: size, color, transition: "all 0.3s ease" }}
+      />
+    ),
+    assignmentInd: (
+      <AssignmentIndOutlinedIcon
+        sx={{ fontSize: size, color, transition: "all 0.3s ease" }}
+      />
+    ),
+    edit: (
+      <ModeEditOutlineOutlinedIcon
+        sx={{ fontSize: size, color, transition: "all 0.3s ease" }}
+      />
+    ),
   };
 
   return icons[icon] || <></>;
