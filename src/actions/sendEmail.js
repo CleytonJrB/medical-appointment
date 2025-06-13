@@ -6,22 +6,29 @@
 //   "room": "Sala 101 - Clínica Geral"
 // }
 
-const PROD_URL =
-  "https://cleytonjrbg.app.n8n.cloud/webhook/6ce61fd6-7b6c-473a-8224-73b9708adc01";
-const DEV_URL =
-  "https://cleytonjrbg.app.n8n.cloud/webhook-test/6ce61fd6-7b6c-473a-8224-73b9708adc01";
+import { sendEmailHtml } from "../templates/sendEmailHtml";
 
-const WEBHOOK_BASIC_AUTH_PASS = "7uqZwUmRVQ63cixKpQEUaYHcNOA2m5lN";
+const PROD_URL = "https://api.resend.com/emails";
+
+const RESEND_API_TOKEN = "re_ZmTPRKc7_HrZsTrWgvoUQ39u55GybMsCm";
 
 export async function sendEmail(emailBody) {
   try {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Authorization", `Basic ${WEBHOOK_BASIC_AUTH_PASS}`);
+    myHeaders.append("Authorization", `Bearer ${RESEND_API_TOKEN}`);
 
     const _emailBody = {
       ...emailBody,
+      from: "Acme <onboarding@resend.dev>",
       to: "cleytonjrbg.dev@gmail.com",
+      subject: "Pronto Consulta - Confirmação de Consulta",
+      html: sendEmailHtml({
+        date: emailBody.date,
+        doctor: emailBody.doctor,
+        room: emailBody.room,
+        name: emailBody.name,
+      }),
     };
 
     const raw = JSON.stringify(_emailBody);
