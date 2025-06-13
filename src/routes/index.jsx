@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom";
 
 import { routes } from "../utils/general";
 
+import PublicRoute from "../components/publicRoute/publicRoute";
 import PrivateRoute from "../components/privateRoute/PrivateRoute";
 
 import Home from "../pages/[public]/Home";
@@ -18,15 +19,37 @@ import MedicalAppointments from "../pages/[private]/MedicalAppointments";
 import ServiceRooms from "../pages/[private]/ServiceRooms";
 import Reports from "../pages/[private]/Reports";
 import AllAppointments from "../pages/[private]/AllAppointments";
+import NotFound from "../pages/NotFound";
 
 export default function AppRoutes() {
   return (
     <Routes>
       {/* Public Routes */}
       <Route path={routes.public.home} element={<Home />} />
-      <Route path={routes.public.login} element={<Login />} />
-      <Route path={routes.public.register} element={<Register />} />
-      <Route path={routes.public.doctorRegister} element={<DoctorRegister />} />
+      <Route
+        path={routes.public.login}
+        element={
+          <PublicRoute>
+            <Login />
+          </PublicRoute>
+        }
+      />
+      <Route
+        path={routes.public.register}
+        element={
+          <PublicRoute>
+            <Register />
+          </PublicRoute>
+        }
+      />
+      <Route
+        path={routes.public.doctorRegister}
+        element={
+          <PublicRoute>
+            <DoctorRegister />
+          </PublicRoute>
+        }
+      />
 
       {/* Private Routes */}
       <Route
@@ -101,6 +124,9 @@ export default function AppRoutes() {
           </PrivateRoute>
         }
       />
+
+      {/* 404 */}
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }
