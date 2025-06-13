@@ -1,39 +1,47 @@
-import { useAuthContext } from "../../providers/AuthProvider";
-import { useNavigate } from "react-router-dom";
+import { useCurrentUser } from "../../hooks/use-current-user";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { routes } from "../../utils/general";
 
 import * as S from "./styles";
 
-import { Button, Stack, Typography } from "@mui/material";
+import { Button, Stack } from "@mui/material";
+import { customColors } from "../../styles/colors";
 
 export default function HomeHeader({ simple = false }) {
-  const { token } = useAuthContext();
+  const user = useCurrentUser();
 
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const isHome = location.pathname === routes.public.home;
 
   function handleNavigate(link) {
     navigate(link);
   }
 
   function renderActions() {
-    if (token) {
+    if (user) {
+      const isAdmin = user?.type === "ADMIN";
+      const redirectTo = isAdmin
+        ? routes.protected.allDoctors
+        : routes.protected.dashboard;
+
       return (
         <Button
-          variant="text"
-          onClick={() => handleNavigate(routes.protected.dashboard)}
+          variant="contained"
+          onClick={() => handleNavigate(redirectTo)}
           sx={{
-            color: "primary.main",
+            fontSize: "1rem",
             textTransform: "none",
-            fontFamily: "Roboto, sans-serif",
+            backgroundColor: "#56abdf",
+            transition: "filter 0.3s ease",
             "&:hover": {
-              backgroundColor: "rgba(0, 0, 0, 0.1)",
+              filter: "brightness(0.9)",
             },
           }}
         >
-          <Typography variant="h6" color="primary">
-            Dashboard
-          </Typography>
+          Dashboard
         </Button>
       );
     }
@@ -43,50 +51,51 @@ export default function HomeHeader({ simple = false }) {
     return (
       <Stack direction="row" spacing={2} alignItems="center">
         <Button
-          variant="text"
+          variant="contained"
           onClick={() => handleNavigate(routes.public.login)}
           sx={{
-            color: "primary.main",
+            fontSize: "1rem",
             textTransform: "none",
-            fontFamily: "Roboto, sans-serif",
+            backgroundColor: customColors.customBlue,
+            transition: "filter 0.3s ease",
             "&:hover": {
-              backgroundColor: "rgba(0, 0, 0, 0.1)",
+              filter: "brightness(0.9)",
             },
           }}
         >
-          <Typography variant="h6" color="primary">
-            Login
-          </Typography>
+          Login
         </Button>
 
         <Button
-          variant="text"
+          variant="contained"
           onClick={() => handleNavigate(routes.public.register)}
           sx={{
-            color: "primary.main",
+            fontSize: "1rem",
+            color: "#fff",
             textTransform: "none",
-            fontFamily: "Roboto, sans-serif",
+            backgroundColor: customColors.customYellow,
+            transition: "filter 0.3s ease",
             "&:hover": {
-              backgroundColor: "rgba(0, 0, 0, 0.1)",
+              filter: "brightness(0.9)",
             },
           }}
         >
-          <Typography variant="h6" color="primary">
-            Registro
-          </Typography>
+          Cadastrar-se
         </Button>
       </Stack>
     );
   }
 
   return (
-    <S.HeaderContainer>
+    <S.HeaderContainer minHeight={"10vh"} maxHeight={"10vh"}>
       <img
         className="logo"
-        src={"src/assets/medical-logo.png"}
+        src={"public/medical.svg"}
         alt={"logo"}
         style={{ cursor: "pointer" }}
-        onClick={() => handleNavigate(routes.public.home)}
+        {...(isHome
+          ? {}
+          : { onClick: () => handleNavigate(routes.public.home) })}
       />
 
       {renderActions()}
