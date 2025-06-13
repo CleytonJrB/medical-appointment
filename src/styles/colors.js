@@ -14,4 +14,15 @@ export const customColors = {
   yellow: "#FAF024",
   blue: "#2323FA",
   transparent: "transparent",
+
+  customBlue: "#56abdf",
+  customBlue50: "#e0f2ff",
+  customBlue80: "#1a8ecb",
+  customBlue90: "#0d6ecf",
+  customBlue100: "#0a5f9c",
+  customYellow: "#fec00f",
+  customYellow50: "#fcebbd",
+  customYellow80: "#e6b800",
+  customYellow90: "#d4a300",
+  customYellow100: "#b38c00",
 };
